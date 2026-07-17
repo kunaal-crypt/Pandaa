@@ -1,312 +1,354 @@
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // --- 1. STARS & STARFIELD ENGINE (HTML5 Canvas) ---
-    const starfieldCanvas = document.getElementById("starfield");
-    const starCtx = starfieldCanvas.getContext("2d");
-    
-    let starsArray = [];
-    const maxStars = 150;
+/* ==========================================================================
+   AUTHENTICATION & SOUND ENGINE
+   ========================================================================== */
+const PASSCODE = "09"; // Set your preferred passcode here (e.g. "09" for Class 9th)
+const unlockBtn = document.getElementById('unlock-btn');
+const passInput = document.getElementById('password-input');
+const gatekeeper = document.getElementById('gatekeeper');
+const mainExp = document.getElementById('main-experience');
+const bgMusic = document.getElementById('bg-music');
+const errorMsg = document.getElementById('error-msg');
 
-    function resizeStarfield() {
-        starfieldCanvas.width = window.innerWidth;
-        starfieldCanvas.height = window.innerHeight;
+unlockBtn.addEventListener('click', attemptUnlock);
+passInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') attemptUnlock();
+});
+
+function attemptUnlock() {
+    if (passInput.value.trim() === PASSCODE) {
+        gatekeeper.classList.add('fade-out');
+        setTimeout(() => {
+            gatekeeper.classList.add('hidden');
+            mainExp.classList.remove('hidden');
+            initExperience();
+        }, 1500);
+    } else {
+        errorMsg.textContent = "That is not the key, but remember where you met...";
+        setTimeout(() => { errorMsg.textContent = ""; }, 4000);
     }
-    window.addEventListener("resize", resizeStarfield);
-    resizeStarfield();
+}
 
-    class Star {
-        constructor() {
-            this.x = Math.random() * starfieldCanvas.width;
-            this.y = Math.random() * starfieldCanvas.height;
-            this.size = Math.random() * 1.5 + 0.5;
-            this.speedX = (Math.random() - 0.5) * 0.05;
-            this.speedY = (Math.random() - 0.5) * 0.05;
-            this.twinkleFactor = Math.random();
+function initExperience() {
+    // Cinematic Soft Fade-In of Music (4-5 seconds)
+    bgMusic.volume = 0;
+    bgMusic.play().catch(err => console.log("Audio waiting for explicit interaction."));
+    let vol = 0;
+    const fadeInterval = setInterval(() => {
+        if (vol < 0.3) { // Caps volume comfortably at 30%
+            vol += 0.02;
+            bgMusic.volume = vol;
+        } else {
+            clearInterval(fadeInterval);
         }
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
+    }, 300);
 
-            if (this.x < 0 || this.x > starfieldCanvas.width) this.speedX *= -1;
-            if (this.y < 0 || this.y > starfieldCanvas.height) this.speedY *= -1;
+    initInteractiveCanvas();
+    initScrollTracker();
+    initFallingStars();
+}
 
-            this.twinkleFactor += 0.01;
-        }
-        draw() {
-            starCtx.beginPath();
-            let alpha = Math.abs(Math.sin(this.twinkleFactor));
-            starCtx.fillStyle = `rgba(220, 211, 255, ${alpha})`;
-            starCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            starCtx.fill();
-        }
+/* ==========================================================================
+   DIARY DIALOGUE (PAGE TURNING)
+   ========================================================================== */
+function turnPage(from, to) {
+    const fromPage = document.getElementById(`page-${from}`);
+    const toPage = document.getElementById(`page-${to}`);
+    if (fromPage && toPage) {
+        fromPage.classList.remove('active');
+        toPage.classList.add('active');
     }
+}
 
-    for (let i = 0; i < maxStars; i++) {
-        starsArray.push(new Star());
-    }
+/* ==========================================================================
+   ATMOSPHERE SKY CONTROLLER (SCROLL-BASED)
+   ========================================================================== */
+function initScrollTracker() {
+    const sections = document.querySelectorAll('.story-section');
+    const options = { threshold: 0.45 }; // Changes sky when section is ~halfway visible
 
-    function animateStars() {
-        starCtx.clearRect(0, 0, starfieldCanvas.width, starfieldCanvas.height);
-        starsArray.forEach(star => {
-            star.update();
-            star.draw();
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const skyTheme = entry.target.getAttribute('data-sky');
+                document.body.setAttribute('data-active-sky', skyTheme);
+            }
         });
-        requestAnimationFrame(animateStars);
+    }, options);
+
+    sections.forEach(sec => observer.observe(sec));
+
+    // Also observe images inside Section 2 to reveal them elegantly on scroll
+    const cards = document.querySelectorAll('.photo-card');
+    const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('reveal-card');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => cardObserver.observe(card));
+}
+
+/* ==========================================================================
+   INTERACTIVE CANVAS (SPARKLE CURSOR TRAIL)
+   ========================================================================== */
+let canvas, ctx;
+let particles = [];
+
+function initInteractiveCanvas() {
+    canvas = document.getElementById('sparkleCanvas');
+    ctx = canvas.getContext('2d');
+    resizeCanvas();
+
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('mousemove', addParticles);
+    window.addEventListener('touchmove', (e) => {
+        addParticles(e.touches[0]);
+    });
+
+    animateParticles();
+}
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 2.5 + 0.5;
+        this.speedX = Math.random() * 1.5 - 0.75;
+        this.speedY = Math.random() * 1.5 - 0.75;
+        this.color = `rgba(216, 180, 254, ${Math.random() * 0.7 + 0.3})`;
+        this.life = 1;
+        this.decay = Math.random() * 0.015 + 0.005;
     }
-    animateStars();
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.life -= this.decay;
+    }
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.life;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
 
+function addParticles(e) {
+    for (let i = 0; i < 2; i++) {
+        particles.push(new Particle(e.clientX, e.clientY));
+    }
+}
 
-    // --- 2. AUDIO & PASSWORD UNLOCK SYSTEM ---
-    const passwordScreen = document.getElementById("password-screen");
-    const unlockBtn = document.getElementById("unlock-btn");
-    const secretInput = document.getElementById("secret-key");
-    const mainContent = document.getElementById("main-content");
-    const musicWidget = document.getElementById("music-widget");
-    const bgMusic = document.getElementById("bg-music");
-    const musicToggleBtn = document.getElementById("music-toggle");
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => p.life > 0);
+    particles.forEach(p => {
+        p.update();
+        p.draw();
+    });
+    requestAnimationFrame(animateParticles);
+}
 
-    let isMusicPlaying = false;
+/* ==========================================================================
+   HIDDEN DISCOVERIES & ELEMENT INTERACTIONS
+   ========================================================================== */
+// Click Moon -> Mini Starburst
+document.getElementById('moon-trigger').addEventListener('click', (e) => {
+    const rect = e.target.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    for (let i = 0; i < 20; i++) {
+        particles.push(new Particle(x, y));
+    }
+});
 
-    function handleUnlock() {
-        const value = secretInput.value.trim().toLowerCase();
+// Butterfly & Flower Flutter/Scatter Animations
+document.getElementById('butterfly').addEventListener('click', function() {
+    this.style.transition = "transform 1.5s cubic-bezier(0.25, 1, 0.5, 1)";
+    this.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * -250 - 50}px) scale(0)`;
+    setTimeout(() => {
+        this.style.transform = "none";
+    }, 4000);
+});
+
+document.getElementById('flower').addEventListener('click', function(e) {
+    const rect = e.target.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top;
+    // Generate Falling Petals (Pink Particles)
+    for (let i = 0; i < 15; i++) {
+        let petal = new Particle(x, y);
+        petal.color = `rgba(244, 143, 177, ${Math.random() * 0.8 + 0.2})`;
+        petal.speedY = Math.random() * 2 + 1; // Slide straight down
+        particles.push(petal);
+    }
+});
+
+/* ==========================================================================
+   FALLING STARS (SECTION 4 CANVAS BACKGROUND)
+   ========================================================================== */
+let starCanvas, starCtx;
+let stars = [];
+
+function initFallingStars() {
+    starCanvas = document.getElementById('fallingStarsCanvas');
+    starCtx = starCanvas.getContext('2d');
+    
+    const resizeStarCanvas = () => {
+        starCanvas.width = starCanvas.parentElement.clientWidth;
+        starCanvas.height = starCanvas.parentElement.clientHeight;
+    };
+    resizeStarCanvas();
+    window.addEventListener('resize', resizeStarCanvas);
+
+    for (let i = 0; i < 20; i++) {
+        stars.push({
+            x: Math.random() * starCanvas.width,
+            y: Math.random() * starCanvas.height - starCanvas.height,
+            length: Math.random() * 30 + 10,
+            speed: Math.random() * 3 + 2,
+            opacity: Math.random() * 0.5 + 0.2
+        });
+    }
+    animateFallingStars();
+}
+
+function animateFallingStars() {
+    starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+    stars.forEach(star => {
+        starCtx.strokeStyle = `rgba(255, 255, 255, ${star.opacity})`;
+        starCtx.lineWidth = 1;
+        starCtx.beginPath();
+        starCtx.moveTo(star.x, star.y);
+        starCtx.lineTo(star.x - star.length/2, star.y + star.length);
+        starCtx.stroke();
+
+        star.y += star.speed;
+        star.x -= star.speed / 2;
+
+        if (star.y > starCanvas.height) {
+            star.y = -50;
+            star.x = Math.random() * starCanvas.width;
+        }
+    });
+    requestAnimationFrame(animateFallingStars);
+}
+
+/* ==========================================================================
+   CANDLE BLOW CINEMATIC (BLACKOUT -> SILENCE -> FIREWORKS)
+   ========================================================================== */
+const candleTrigger = document.getElementById('candle-trigger');
+const flame = document.getElementById('candle-flame');
+const blackout = document.getElementById('blackout');
+const hintText = document.getElementById('candle-hint-text');
+const finalSection = document.getElementById('section-5');
+const finalMessageBox = document.getElementById('final-message-box');
+
+candleTrigger.addEventListener('click', () => {
+    // 1. Extinguish Flame
+    flame.style.display = 'none';
+    hintText.textContent = "Wish made.";
+
+    // 2. Blackout Screen & Silence Audio Instantly
+    blackout.classList.add('active');
+    bgMusic.pause();
+
+    // 3. Cinematic Pause (1.5 Seconds)
+    setTimeout(() => {
+        // Remove blackout screen
+        blackout.classList.remove('active');
         
-        // Accepts any variation of vanshika or common birth years
-        if (value === "vanshika" || value === "2000" || value === "2001" || value === "2002" || value === "2003" || value === "2004" || value === "2005" || value === "2006" || value === "17") {
-            // Unlocked Animation Sequence
-            passwordScreen.classList.add("fade-out");
-            mainContent.classList.add("unlocked");
-            musicWidget.classList.remove("hidden");
-            
-            // Trigger Music Autoplay
-            playMusic();
-            
-            // Trigger Typist Effect 1s after reveal
-            setTimeout(startTypingEffect, 1000);
-        } else {
-            alert("The galaxy whispers: That key is incorrect. Try entering 'vanshika' ✨");
-            secretInput.value = "";
-        }
+        // 4. Smoothly scroll into final scene
+        finalSection.scrollIntoView({ behavior: 'smooth' });
+
+        // 5. Restore Audio and Trigger Big Fireworks
+        bgMusic.play();
+        triggerFireworks();
+        
+        // 6. Fade-in ending text
+        finalMessageBox.classList.add('revealed');
+    }, 1500);
+});
+
+/* ==========================================================================
+   FIREWORKS ENGINE
+   ========================================================================== */
+let fCanvas, fCtx;
+let fParticles = [];
+
+function triggerFireworks() {
+    fCanvas = document.getElementById('fireworksCanvas');
+    fCanvas.classList.remove('hidden-canvas');
+    fCtx = fCanvas.getContext('2d');
+    
+    fCanvas.width = fCanvas.parentElement.clientWidth;
+    fCanvas.height = fCanvas.parentElement.clientHeight;
+
+    // Launch initial firework burst coordinates
+    for (let b = 0; b < 5; b++) {
+        setTimeout(() => {
+            createExplosion(Math.random() * fCanvas.width, Math.random() * (fCanvas.height * 0.6) + 100);
+        }, b * 400);
     }
+    
+    animateFireworks();
+}
 
-    function playMusic() {
-        bgMusic.play().then(() => {
-            isMusicPlaying = true;
-            musicToggleBtn.innerHTML = '<i class="fa-solid fa-compact-disc fa-spin"></i>';
-        }).catch(err => console.log("Audio awaiting user interaction trigger..."));
-    }
-
-    function toggleMusic() {
-        if (isMusicPlaying) {
-            bgMusic.pause();
-            isMusicPlaying = false;
-            musicToggleBtn.innerHTML = '<i class="fa-solid fa-compact-disc"></i>';
-        } else {
-            bgMusic.play();
-            isMusicPlaying = true;
-            musicToggleBtn.innerHTML = '<i class="fa-solid fa-compact-disc fa-spin"></i>';
-        }
-    }
-
-    unlockBtn.addEventListener("click", handleUnlock);
-    secretInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") handleUnlock();
-    });
-    musicToggleBtn.addEventListener("click", toggleMusic);
-
-
-    // --- 3. AMBIENT APPLE-STYLE TYPING EFFECT ---
-    const words = ["your personal dreamscape.", "a cosmic celebration of you.", "built with brotherly love."];
-    let wordIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    const typedTextSpan = document.getElementById("typed-text");
-
-    function startTypingEffect() {
-        const currentWord = words[wordIndex];
-        if (isDeleting) {
-            typedTextSpan.textContent = currentWord.substring(0, charIndex - 1);
-            charIndex--;
-        } else {
-            typedTextSpan.textContent = currentWord.substring(0, charIndex + 1);
-            charIndex++;
-        }
-
-        let typingSpeed = 100;
-        if (isDeleting) typingSpeed /= 2;
-
-        if (!isDeleting && charIndex === currentWord.length) {
-            typingSpeed = 2000; // Pause at end of word
-            isDeleting = true;
-        } else if (isDeleting && charIndex === 0) {
-            isDeleting = false;
-            wordIndex = (wordIndex + 1) % words.length;
-            typingSpeed = 500; // Pause before typing next word
-        }
-
-        setTimeout(startTypingEffect, typingSpeed);
-    }
-
-
-    // --- 4. ANIMATION CONTROLLER (Scroll & Intersection Observer) ---
-    const sections = document.querySelectorAll(".scroll-section");
-    const timelineItems = document.querySelectorAll(".timeline-item");
-    const navLinks = document.querySelectorAll(".nav-links a");
-
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-                
-                // Track active state in Header Navbar
-                const activeId = entry.target.getAttribute("id");
-                navLinks.forEach(link => {
-                    link.classList.remove("active");
-                    if (link.getAttribute("href") === `#${activeId}`) {
-                        link.classList.add("active");
-                    }
-                });
-            }
+function createExplosion(x, y) {
+    const colors = ['#f3e8ff', '#d8b4fe', '#a78bfa', '#ffb7b2', '#ffdac1'];
+    for (let i = 0; i < 50; i++) {
+        fParticles.push({
+            x: x,
+            y: y,
+            speedX: Math.random() * 6 - 3,
+            speedY: Math.random() * 6 - 3,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            life: 1,
+            decay: Math.random() * 0.02 + 0.01
         });
-    }, { threshold: 0.15 });
-
-    sections.forEach(section => sectionObserver.observe(section));
-
-    const timelineObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("visible-item");
-            }
-        });
-    }, { threshold: 0.2 });
-
-    timelineItems.forEach(item => timelineObserver.observe(item));
-
-
-    // --- 5. FX CANVAS (Fireworks & Confetti Particles Engine) ---
-    const fxCanvas = document.getElementById("fx-canvas");
-    const fxCtx = fxCanvas.getContext("2d");
-    let fxParticles = [];
-
-    function resizeFxCanvas() {
-        fxCanvas.width = window.innerWidth;
-        fxCanvas.height = window.innerHeight;
     }
-    window.addEventListener("resize", resizeFxCanvas);
-    resizeFxCanvas();
+}
 
-    class Particle {
-        constructor(x, y, color) {
-            this.x = x;
-            this.y = y;
-            this.color = color;
-            this.radius = Math.random() * 3 + 1;
-            this.velocity = {
-                x: (Math.random() - 0.5) * (Math.random() * 8 + 4),
-                y: (Math.random() - 0.5) * (Math.random() * 8 + 4)
-            };
-            this.gravity = 0.08;
-            this.alpha = 1;
-            this.decay = Math.random() * 0.015 + 0.01;
-        }
+function animateFireworks() {
+    fCtx.clearRect(0, 0, fCanvas.width, fCanvas.height);
+    fParticles = fParticles.filter(p => p.life > 0);
+    
+    fParticles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        p.speedY += 0.04; // Gravity pull
+        p.life -= p.decay;
 
-        draw() {
-            fxCtx.save();
-            fxCtx.globalAlpha = this.alpha;
-            fxCtx.beginPath();
-            fxCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            fxCtx.fillStyle = this.color;
-            fxCtx.shadowBlur = 10;
-            fxCtx.shadowColor = this.color;
-            fxCtx.fill();
-            fxCtx.restore();
-        }
-
-        update() {
-            this.velocity.y += this.gravity;
-            this.x += this.velocity.x;
-            this.y += this.velocity.y;
-            this.alpha -= this.decay;
-        }
-    }
-
-    function createFirework(x, y) {
-        const colors = ["#dcd3ff", "#8e74ec", "#f5b3ff", "#ffffff", "#ffd3ec"];
-        for (let i = 0; i < 40; i++) {
-            fxParticles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
-        }
-    }
-
-    function animateFx() {
-        fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
-        fxParticles.forEach((particle, index) => {
-            if (particle.alpha <= 0) {
-                fxParticles.splice(index, 1);
-            } else {
-                particle.update();
-                particle.draw();
-            }
-        });
-        requestAnimationFrame(animateFx);
-    }
-    animateFx();
-
-
-    // --- 6. CAKE BLOW OUT & RITUAL INTERACTION ---
-    const blowBtn = document.getElementById("blow-btn");
-    const flame = document.getElementById("candle-flame");
-    const successMsg = document.getElementById("candle-success");
-
-    blowBtn.addEventListener("click", () => {
-        if (!flame.classList.contains("extinguished")) {
-            // Blow Candle
-            flame.classList.add("extinguished");
-            successMsg.classList.remove("hidden");
-            blowBtn.textContent = "Candle Blown! ✨";
-            blowBtn.style.background = "rgba(220, 211, 255, 0.2)";
-            blowBtn.style.color = "white";
-
-            // Trigger Massive Firework Display right around the cake
-            const rect = blowBtn.getBoundingClientRect();
-            const centerX = rect.left + (rect.width / 2);
-            const centerY = rect.top - 150;
-
-            for (let f = 0; f < 6; f++) {
-                setTimeout(() => {
-                    const devX = centerX + (Math.random() - 0.5) * 400;
-                    const devY = centerY + (Math.random() - 0.5) * 200;
-                    createFirework(devX, devY);
-                }, f * 300);
-            }
-        }
+        fCtx.fillStyle = p.color;
+        fCtx.globalAlpha = p.life;
+        fCtx.beginPath();
+        fCtx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        fCtx.fill();
     });
 
+    if (fParticles.length > 0) {
+        requestAnimationFrame(animateFireworks);
+    }
+}
 
-    // --- 7. RESTART SYSTEM ---
-    const restartBtn = document.getElementById("restart-btn");
-    restartBtn.addEventListener("click", () => {
-        // Relight candle
-        flame.classList.remove("extinguished");
-        successMsg.classList.add("hidden");
-        blowBtn.textContent = "Blow Out Candle";
-        blowBtn.style.background = "";
-        blowBtn.style.color = "";
+/* ==========================================================================
+   THE SECRET PORTAL STAR (HIDDEN STAR MODAL)
+   ========================================================================== */
+const secretStar = document.getElementById('secret-star-btn');
+const secretPortal = document.getElementById('secret-portal');
+const closePortal = document.getElementById('close-portal-btn');
 
-        // Smooth scroll back to top
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    });
+secretStar.addEventListener('click', () => {
+    secretPortal.classList.add('active');
+});
 
-    // --- 8. MOUSE PARALLAX EFFECT FOR PREMIUM HERO FEEL ---
-    document.addEventListener("mousemove", (e) => {
-        const depth = 20;
-        const moveX = (e.clientX - window.innerWidth / 2) / depth;
-        const moveY = (e.clientY - window.innerHeight / 2) / depth;
-
-        const mainTitle = document.querySelector(".main-title");
-        if (mainTitle && mainContent.classList.contains("unlocked")) {
-            mainTitle.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
-        }
-    });
+closePortal.addEventListener('click', () => {
+    secretPortal.classList.remove('active');
 });
