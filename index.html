@@ -1,303 +1,1074 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="premium-dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Vanshika 🌙</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@100;200;300;400;500&display=swap" rel="stylesheet">
-</head>
-<body>
-
-    <!-- Infinite Background Starfield Dynamic Canvas -->
-    <canvas id="starfieldCanvas"></canvas>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>An Extraordinary Celebration | Happy Birthday ✨</title>
     
-    <!-- Interactive Mouse and Touch Particle Trail Canvas -->
-    <canvas id="sparkleCanvas"></canvas>
+    <!-- Google Fonts Preconnections for Maximum Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@100;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Link to Master Stylesheet File -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="loading-state locked-scroll">
 
-    <!-- Background Ambient Cinematic Audio -->
-    <audio id="bg-music" loop preload="auto">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- 1. INTRO PASSCODE GATEWAY -->
-    <div id="gatekeeper" class="gatekeeper">
-        <div class="gate-ambient-glow"></div>
-        <div class="gate-content">
-            <h1 class="gate-title">A Dream to Walk Through</h1>
-            <p class="gate-subtitle">Enter the number of the class where two paths crossed and a lifelong bond began.</p>
-            <div class="input-wrapper">
-                <input type="password" id="password-input" placeholder="Enter password..." autocomplete="off" maxlength="10">
-                <button id="unlock-btn" class="unlock-button">
-                    <span class="btn-text">Unlock World</span>
-                    <span class="btn-glow"></span>
-                </button>
-            </div>
-            <p id="error-msg" class="error-msg"></p>
-        </div>
+    <!-- MASTER AUDIO ARCHITECTURE -->
+    <div id="audioManagementSystem" class="audio-system-wrapper" data-status="stopped" aria-hidden="true">
+        <!-- Main Background Track requested by user -->
+        <audio id="birthdayMusic" src="birthday.mp3" loop preload="auto"></audio>
+        
+        <!-- UI Sound Effect Nodes for Immersive Feedback -->
+        <audio id="sfxClick" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" preload="auto"></audio>
+        <audio id="sfxTransition" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav" preload="auto"></audio>
+        <audio id="sfxSuccess" src="https://assets.mixkit.co/active_storage/sfx/2017/2017-84.wav" preload="auto"></audio>
     </div>
 
-    <!-- MAIN IMMERSIVE EXPERIENCE -->
-    <main id="main-experience" class="main-experience hidden">
-
-        <!-- SECTION 1: THE DARK SKY & DIARY -->
-        <section class="story-section" id="section-1" data-sky="dark">
-            <div class="floating-quote" id="quote-1">"Some people become memories without trying."</div>
-            
-            <div class="section-content">
-                <div class="moon-wrapper">
-                    <div class="interactive-moon" id="moon-trigger" title="Touch the moon to shatter the sky...">🌙</div>
-                    <div class="moon-aura"></div>
-                </div>
-                
-                <h2 class="section-title">The Words I Wanted To Say</h2>
-                
-                <div class="diary-container">
-                    <div class="diary-glow-layer"></div>
-                    
-                    <!-- Page 1 -->
-                    <div class="diary-page active" id="page-1">
-                        <div class="page-header">
-                            <span class="page-marker">💌 Chapter I</span>
-                        </div>
-                        <h3>Welcome to the Universe We Built</h3>
-                        <p class="page-text">Welcome to this little corner of the cosmos. Back in class ninth, we were just two individual stars floating around in a chaotic school classroom. We had no idea that a simple seat assignment or a random conversation would completely alter our trajectories. This website is a living, breathing testament to that beautiful journey.</p>
-                        <div class="page-footer">
-                            <button class="next-page-btn" onclick="turnPage(1, 2)">Turn Page Forward →</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Page 2 -->
-                    <div class="diary-page" id="page-2">
-                        <div class="page-header">
-                            <span class="page-marker">💜 Chapter II</span>
-                        </div>
-                        <h3>The Spirit I Admire</h3>
-                        <p class="page-text">If there is one thing that has remained absolutely constant through all these years, Vanshika, it is your soul. In a world that often grows cold, busy, or unfeeling, your genuine kindness stands out like a brilliant beacon. You possess an exquisite ability to lift people up simply by existing in their space, and I admire that more than words can ever capture.</p>
-                        <div class="page-footer">
-                            <button class="next-page-btn" onclick="turnPage(2, 3)">Turn Page Forward →</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Page 3 -->
-                    <div class="diary-page" id="page-3">
-                        <div class="page-header">
-                            <span class="page-marker">🌸 Chapter III</span>
-                        </div>
-                        <h3>A Collection of Wishes</h3>
-                        <p class="page-text">As you step forward today into a brand new chapter of your life, my wishes for you are boundless. May you find trails that make your soul catch fire with joy. May you never lose that brilliant smile that defeats darkness instantly. Never doubt your strength, your capability, or your profound worth. You are built for beautiful things.</p>
-                        <div class="page-footer">
-                            <button class="next-page-btn" onclick="turnPage(3, 4)">Turn Page Forward →</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Page 4 -->
-                    <div class="diary-page" id="page-4">
-                        <div class="page-header">
-                            <span class="page-marker">🌙 Chapter IV</span>
-                        </div>
-                        <h3>As the Years Drift By</h3>
-                        <p class="page-text">Time is a strange thing. It moves quickly, rewriting landscapes and changing everything around us. Yet, despite the chaotic rush of growing up, our bond has stayed anchored. We evolved from classmates to the deepest version of brother and sister. No distance, no schedule, and no phase of life will ever shake this foundation.</p>
-                        <div class="page-footer">
-                            <button class="next-page-btn" onclick="turnPage(4, 5)">Turn Page Forward →</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Page 5 -->
-                    <div class="diary-page" id="page-5">
-                        <div class="page-header">
-                            <span class="page-marker">✨ The Final Chapter</span>
-                        </div>
-                        <h3>Happy Birthday, Sis</h3>
-                        <p class="page-text">This day belongs entirely to you. Take a long, slow breath. Let the tranquility of this night wrap around you, and know that you are deeply loved, fiercely protected, and endlessly celebrated. Happy Birthday to my favorite human in the world.</p>
-                        <div class="page-footer">
-                            <button class="next-page-btn reset-page-btn" onclick="turnPage(5, 1)">Return to Beginning ↺</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="scroll-indicator">
-                <span class="scroll-text">Scroll Down Into the Dream</span>
-                <span class="scroll-arrow">↓</span>
-            </div>
-        </section>
-
-        <!-- SECTION 2: THE PURPLE SKY, FOG & CINEMATIC GALLERY -->
-        <section class="story-section" id="section-2" data-sky="purple">
-            <div class="fog-container">
-                <div class="fog-wave fog-wave-1"></div>
-                <div class="fog-wave fog-wave-2"></div>
-            </div>
-            <div class="floating-quote" id="quote-2">"Every smile leaves a little light behind."</div>
-            
-            <div class="section-content">
-                <h2 class="section-title">Memories That Stayed</h2>
-                
-                <div class="gallery-grid">
-                    <!-- Photo Card 1: Slide from Left -->
-                    <div class="premium-photo-card slide-left-trigger">
-                        <div class="photo-frame">
-                            <div class="photo-artwork design-gradient-1"></div>
-                            <div class="photo-overlay-shimmer"></div>
-                        </div>
-                        <div class="photo-details">
-                            <span class="photo-index">01 // THE CROSSROAD</span>
-                            <p class="photo-caption">Class 9th chaos: where our parallel lives crossed paths.</p>
-                        </div>
-                    </div>
-
-                    <!-- Photo Card 2: Slide from Right -->
-                    <div class="premium-photo-card slide-right-trigger">
-                        <div class="photo-frame">
-                            <div class="photo-artwork design-gradient-2"></div>
-                            <div class="photo-overlay-shimmer"></div>
-                        </div>
-                        <div class="photo-details">
-                            <span class="photo-index">02 // UNFILTERED JOY</span>
-                            <p class="photo-caption">The historic laughter shared on the darkest winter mornings.</p>
-                        </div>
-                    </div>
-
-                    <!-- Photo Card 3: Zoom In -->
-                    <div class="premium-photo-card zoom-in-trigger">
-                        <div class="photo-frame">
-                            <div class="photo-artwork design-gradient-3"></div>
-                            <div class="photo-overlay-shimmer"></div>
-                        </div>
-                        <div class="photo-details">
-                            <span class="photo-index">03 // IN PERFECT SILENCE</span>
-                            <p class="photo-caption">A quiet afternoon frozen perfectly in time, safely kept inside.</p>
-                        </div>
-                    </div>
-
-                    <!-- Photo Card 4: Rotate Slightly -->
-                    <div class="premium-photo-card rotate-slight-trigger">
-                        <div class="photo-frame">
-                            <div class="photo-artwork design-gradient-4"></div>
-                            <div class="photo-overlay-shimmer"></div>
-                        </div>
-                        <div class="photo-details">
-                            <span class="photo-index">04 // THE CHOSEN SACRED OATH</span>
-                            <p class="photo-caption">The day we decided to stay family forever, no matter what happens.</p>
-                        </div>
-                    </div>
-
-                    <!-- Photo Card 5: Elegant Fade In -->
-                    <div class="premium-photo-card fade-in-trigger">
-                        <div class="photo-frame">
-                            <div class="photo-artwork design-gradient-5"></div>
-                            <div class="photo-overlay-shimmer"></div>
-                        </div>
-                        <div class="photo-details">
-                            <span class="photo-index">05 // TRIUMPHS AND STEPS</span>
-                            <p class="photo-caption">Celebrating the small steps, knowing big landmarks would follow.</p>
-                        </div>
-                    </div>
-
-                    <!-- Photo Card 6: Slide Upward -->
-                    <div class="premium-photo-card slide-up-trigger">
-                        <div class="photo-frame">
-                            <div class="photo-artwork design-gradient-6"></div>
-                            <div class="photo-overlay-shimmer"></div>
-                        </div>
-                        <div class="photo-details">
-                            <span class="photo-index">06 // ETERNITY BOUND</span>
-                            <p class="photo-caption">To infinitely more sunset talks, inside jokes, and protective support.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 3: THE MOON BRIGHTENS, CLOUDS DRIFT & INTERACTIVE GARDEN -->
-        <section class="story-section" id="section-3" data-sky="bright-moon">
-            <div class="cloud-layer-left"></div>
-            <div class="cloud-layer-right"></div>
-            <div class="floating-quote" id="quote-3">"The stars look brighter tonight."</div>
-            
-            <div class="section-content">
-                <h2 class="section-title">Dreams I Wish For You</h2>
-                
-                <div class="interactive-sanctuary">
-                    <p class="sanctuary-hint">The universe responds to your fingertips. Touch a manifestation below...</p>
-                    
-                    <div class="sanctuary-hub">
-                        <div class="sanctuary-node" id="butterfly" title="Awaken the cosmic butterfly...">
-                            <div class="node-icon">🦋</div>
-                            <span class="node-label">Ethereal Flight</span>
-                        </div>
-                        <div class="sanctuary-node" id="flower" title="Scatter fragile blossom petals...">
-                            <div class="node-icon">🌸</div>
-                            <span class="node-label">Blossom Spill</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- THE INTENTIONAL ULTRA-HIDDEN SECRET STAR -->
-            <div class="cosmic-secret-star" id="secret-star-btn" title="A glitch in the cosmic pattern...">★</div>
-        </section>
-
-        <!-- SECTION 4: TINY FALLING STARS & THE RITUAL CANDLE -->
-        <section class="story-section" id="section-4" data-sky="falling-stars">
-            <canvas id="fallingStarsCanvas"></canvas>
-            
-            <div class="section-content">
-                <h2 class="section-title">Make a Wish</h2>
-                
-                <div class="candle-altar">
-                    <p class="candle-instructions" id="candle-hint-text">Gently tap the flame to blow it out and let your dream fly...</p>
-                    
-                    <div class="candle-fixture" id="candle-trigger">
-                        <div class="flame-aura"></div>
-                        <div class="candle-flame" id="candle-flame">
-                            <div class="flame-inner"></div>
-                            <div class="flame-core"></div>
-                        </div>
-                        <div class="candle-wick"></div>
-                        <div class="candle-body">
-                            <div class="wax-drip"></div>
-                        </div>
-                        <div class="candle-base"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 5: THE GRAND AURORA & FINAL MEMORY RESIDUE -->
-        <section class="story-section" id="section-5" data-sky="aurora">
-            <div class="aurora-curtain field-1"></div>
-            <div class="aurora-curtain field-2"></div>
-            <canvas id="fireworksCanvas"></canvas>
-            
-            <!-- Absolute theatrical blackout panel -->
-            <div id="cinematic-blackout" class="cinematic-blackout"></div>
-
-            <div class="section-content final-theater-box" id="final-message-box">
-                <p class="monolith-quote">"Some memories stay forever."</p>
-                <h1 class="monolith-birthday-text">Happy Birthday, Vanshika.</h1>
-                <div class="monolith-underline"></div>
-            </div>
-        </section>
-    </main>
-
-    <!-- THE ULTRA-SECRET PORTAL MODAL DIARY PAGE -->
-    <div id="secret-portal" class="secret-portal-overlay">
-        <div class="portal-glass-panel">
-            <button class="portal-close-button" id="close-portal-btn" aria-label="Close hidden layer">×</button>
-            <div class="portal-sparkle-indicator">★</div>
-            <h2 class="portal-heading">The Letter That Stays Hidden</h2>
-            <div class="portal-divider"></div>
-            <p class="portal-paragraph">
-                Vanshika, if you are reading these words, it means you clicked that tiny, off-beat glowing star in the sky. I knew you would look closely enough to spot it.
-            </p>
-            <p class="portal-paragraph">
-                I wanted to leave an completely un-compromised, secret letter just for you. Thank you for being the most incredible sister a brother could ever ask for. From class ninth to this exact moment, you have made my life exponentially richer, kinder, and happier. No matter where time pulls us, or how vast our responsibilities grow, you will always have a brother standing directly behind you, ready to protect you and support you. Happy Birthday, sis. Always and forever. 💜
-            </p>
-        </div>
+    <!-- GLOBAL VISUAL EFFECT ENGINE CONTAINERS -->
+    <div id="globalParticleEngine" class="particle-engine-viewport">
+        <canvas id="particleCanvas" class="particle-render-layer"></canvas>
     </div>
+    
+    <div id="ambientGlowSystem" class="ambient-glow-viewport">
+        <div class="glow-orb glow-orb-primary" id="orbPrimary"></div>
+        <div class="glow-orb glow-orb-secondary" id="orbSecondary"></div>
+        <div class="glow-orb glow-orb-tertiary" id="orbTertiary"></div>
+    </div>
+    
+    <div id="confettiDeploymentMatrix" class="confetti-matrix-container"></div>
 
+    <!-- APP WRAPPER CORE -->
+    <div id="appRoot" class="application-root-container">
+
+        <!-- SECTION 1: CINEMATIC ENTER GATEWAY (PRE-INITIALIZATION OVERLAY) -->
+        <div id="cinematicGate" class="gate-overlay-wrapper activated" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+            <div class="gate-background-shimmer"></div>
+            <div class="gate-vignette-effect"></div>
+            
+            <div class="gate-interface-box">
+                <div class="gate-branding-header">
+                    <span class="gate-serial-number">EDITION // 2026</span>
+                    <div class="gate-decorative-line"></div>
+                </div>
+                
+                <div class="gate-main-body">
+                    <div class="gate-logo-animation-container">
+                        <div class="pulse-ring ring-outer"></div>
+                        <div class="pulse-ring ring-middle"></div>
+                        <div class="pulse-ring ring-inner"></div>
+                        <div class="gate-central-emblem">
+                            <span class="emblem-glyph">✨</span>
+                        </div>
+                    </div>
+                    
+                    <h1 id="gateTitle" class="gate-primary-title">
+                        <span class="title-line-top">A Private Experience</span>
+                        <span class="title-line-main">CREATING THE MAGIC</span>
+                    </h1>
+                    
+                    <p class="gate-description-text">
+                        This digital canvas has been engineered with customized layouts, smooth dynamic timelines, visual asset galleries, and high-fidelity spatial sound design. For the full intended experience, please ensure your system audio is enabled.
+                    </p>
+                </div>
+                
+                <div class="gate-action-footer">
+                    <!-- Master Activation Button controls initialization sequences -->
+                    <button id="gateUnlockTrigger" class="gate-unlock-button" aria-label="Unlock birthday experience and initialize music">
+                        <span class="button-shine-effect"></span>
+                        <span class="button-label-wrapper">
+                            <span class="button-text-main">INITIALIZE EXPERIENCE</span>
+                            <span class="button-text-sub">LOADS FILES & AUDIO SCRIPT</span>
+                        </span>
+                        <span class="button-arrow-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </span>
+                    </button>
+                    
+                    <div class="gate-system-status">
+                        <div class="status-indicator-dot online"></div>
+                        <span class="status-text-node">Audio Asset Ready: birthday.mp3</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Structural Decorative Layout Accents for Cinematic Scale -->
+            <div class="gate-corner-accent corner-top-left"></div>
+            <div class="gate-corner-accent corner-top-right"></div>
+            <div class="gate-corner-accent corner-bottom-left"></div>
+            <div class="gate-corner-accent corner-bottom-right"></div>
+        </div>
+        <!-- SECTION 2: CINEMATIC HERO ARENA (PARALLAX VIEWPORT) -->
+        <main id="mainContentStage" class="stage-viewport-wrapper visibility-hidden" aria-hidden="true">
+            
+            <section id="heroParallaxSection" class="hero-parallax-viewport" data-scroll-speed="-2">
+                <div class="hero-curtain-vignette"></div>
+                <div class="hero-grid-overlay"></div>
+                
+                <!-- Inner Luxury Frame Work -->
+                <div class="hero-structural-frame">
+                    <div class="frame-border frame-border-top"></div>
+                    <div class="frame-border frame-border-right"></div>
+                    <div class="frame-border frame-border-bottom"></div>
+                    <div class="frame-border frame-border-left"></div>
+                </div>
+
+                <div class="hero-interactive-container">
+                    <div class="hero-badge-row">
+                        <span class="luxury-badge-element">
+                            <span class="badge-dot-pulse"></span>
+                            <span class="badge-text-content">CELEBRATING AN EXTRAORDINARY LIFE</span>
+                        </span>
+                    </div>
+
+                    <!-- Massive Typography Matrix -->
+                    <div class="hero-typography-matrix">
+                        <h2 class="hero-display-supra">THE CELEBRATION</h2>
+                        <h3 class="hero-display-maxima" id="animatedHeroTitle">
+                            <span class="word-wrapper"><span class="char-node" style="--char-index: 1;">H</span><span class="char-node" style="--char-index: 2;">A</span><span class="char-node" style="--char-index: 3;">P</span><span class="char-node" style="--char-index: 4;">P</span><span class="char-node" style="--char-index: 5;">Y</span></span>
+                            <span class="word-wrapper"><span class="char-node" style="--char-index: 6;">B</span><span class="char-node" style="--char-index: 7;">I</span><span class="char-node" style="--char-index: 8;">R</span><span class="char-node" style="--char-index: 9;">T</span><span class="char-node" style="--char-index: 10;">H</span><span class="char-node" style="--char-index: 11;">D</span><span class="char-node" style="--char-index: 12;">A</span><span class="char-node" style="--char-index: 13;">Y</span></span>
+                        </h3>
+                        <div class="hero-divider-group">
+                            <span class="divider-line line-left"></span>
+                            <span class="divider-diamond">✦</span>
+                            <span class="divider-line line-right"></span>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Floating Stats Dashboard -->
+                    <div class="hero-metrics-dashboard">
+                        <div class="metric-card-node" data-tilt>
+                            <span class="metric-value-string" id="daysCounter">365</span>
+                            <span class="metric-label-string">Days of Growth</span>
+                        </div>
+                        <div class="metric-card-node" data-tilt>
+                            <span class="metric-value-string" id="hoursCounter">8760</span>
+                            <span class="metric-label-string">Hours of Memories</span>
+                        </div>
+                        <div class="metric-card-node" data-tilt>
+                            <span class="metric-value-string" id="blessingsCounter">∞</span>
+                            <span class="metric-label-string">Endless Possibilities</span>
+                        </div>
+                    </div>
+
+                    <!-- Scroll Directive Indicator -->
+                    <div class="hero-scroll-directive" id="scrollIndicatorNode">
+                        <span class="directive-text-element">BEGIN THE CHRONICLE</span>
+                        <div class="mouse-scroll-animation-node">
+                            <div class="mouse-wheel-element"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: INTERACTIVE MILESTONE MESSAGE COMPLEX -->
+            <section id="interactiveMessageComplex" class="message-complex-section">
+                <div class="section-background-text">WISDOM</div>
+                
+                <div class="complex-layout-container">
+                    <div class="complex-grid-layout">
+                        
+                        <!-- Left Pillar: Visual Focal Accent -->
+                        <div class="grid-pillar-visual" data-aos="fade-right">
+                            <div class="visual-card-wrapper">
+                                <div class="card-glass-substrate"></div>
+                                <div class="card-content-inner">
+                                    <span class="quote-giant-glyph">“</span>
+                                    <p class="quote-text-body">Count your life by smiles, not tears. Count your age by friends, not years.</p>
+                                    <div class="quote-author-meta">
+                                        <div class="author-line"></div>
+                                        <span class="author-name-text">Classic Proverb</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Pillar: Deep Feature Narrative Accordion -->
+                        <div class="grid-pillar-narrative" data-aos="fade-left">
+                            <div class="narrative-header-block">
+                                <span class="narrative-kicker">CHAPTER 01 // REFLECTIONS</span>
+                                <h4 class="narrative-primary-heading">A Legacy in the Making</h4>
+                                <p class="narrative-lead-paragraph">Every year is a chapter added to a completely original story. Here is a celebration of your character, your persistence, and the journey ahead.</p>
+                            </div>
+
+                            <!-- Interactive Message Tabs Array -->
+                            <div class="narrative-interactive-accordion" id="messageAccordion">
+                                
+                                <!-- Tab Module 1 -->
+                                <div class="accordion-tab-module active" data-tab-id="chapter1">
+                                    <button class="tab-trigger-element" aria-expanded="true" aria-controls="panelChapter1">
+                                        <span class="tab-index-string">01 /</span>
+                                        <span class="tab-title-string">The Journey of Resilience</span>
+                                        <span class="tab-toggle-icon"></span>
+                                    </button>
+                                    <div id="panelChapter1" class="tab-content-panel" role="region">
+                                        <div class="panel-body-padding">
+                                            <p class="panel-descriptive-text">You have consistently demonstrated what it means to look challenges in the face and turn them into milestones. Your strength isn't just about moving forward; it's about lifting others up with you as you grow. This day marks the beginning of your highest climbing phase yet.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab Module 2 -->
+                                <div class="accordion-tab-module" data-tab-id="chapter2">
+                                    <button class="tab-trigger-element" aria-expanded="false" aria-controls="panelChapter2">
+                                        <span class="tab-index-string">02 /</span>
+                                        <span class="tab-title-string">The Architect of Character</span>
+                                        <span class="tab-toggle-icon"></span>
+                                    </button>
+                                    <div id="panelChapter2" class="tab-content-panel" role="region">
+                                        <div class="panel-body-padding">
+                                            <p class="panel-descriptive-text">True character is forged in choices made when no one is watching. Your choices have built an unshakeable foundation of loyalty, honor, and vision. May this year provide you with the massive canvases you deserve to manifest your grandest creative plans.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab Module 3 -->
+                                <div class="accordion-tab-module" data-tab-id="chapter3">
+                                    <button class="tab-trigger-element" aria-expanded="false" aria-controls="panelChapter3">
+                                        <span class="tab-index-string">03 /</span>
+                                        <span class="tab-title-string">The Horizon Unbound</span>
+                                        <span class="tab-toggle-icon"></span>
+                                    </button>
+                                    <div id="panelChapter3" class="tab-content-panel" role="region">
+                                        <div class="panel-body-padding">
+                                            <p class="panel-descriptive-text">The past is a roadmap, but the horizon ahead is clean, unwritten, and completely yours to control. Step forward with uncompromised confidence. You possess the mental frameworks, the heart, and the drive to conquer precisely what you set your sights on.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- SECTION 4: DEEP ASSET IMMERSIVE GALLERY CORE -->
+            <section id="mediaGallerySection" class="gallery-immersive-viewport">
+                <div class="gallery-background-structural-text">COLLECTION</div>
+                
+                <div class="gallery-layout-container">
+                    
+                    <!-- Section Header Block -->
+                    <div class="gallery-section-header">
+                        <div class="header-metadata-row">
+                            <span class="header-serial">// ARCHIVE VOLUME 01</span>
+                            <div class="header-decorative-accent-dot"></div>
+                        </div>
+                        <h3 class="gallery-primary-title">THE CAPTURED CHRONICLES</h3>
+                        <p class="gallery-lead-text">Six selected captures commemorating moments of pure focus, drive, and celebration. Structured natively inside the system directory.</p>
+                        
+                        <!-- Interactive Gallery Sorting Filters -->
+                        <div class="gallery-filter-control-bar" role="tablist" aria-label="Filter gallery items">
+                            <button class="filter-action-chip active" data-filter="all" role="tab" aria-selected="true">ALL VISUALS [6]</button>
+                            <button class="filter-action-chip" data-filter="candid" role="tab" aria-selected="false">CANDIDS</button>
+                            <button class="filter-action-chip" data-filter="lifestyle" role="tab" aria-selected="false">LIFESTYLE</button>
+                            <button class="filter-action-chip" data-filter="milestone" role="tab" aria-selected="false">CELEBRATION</button>
+                        </div>
+                    </div>
+
+                    <!-- Master Six-Photo Grid Matrix -->
+                    <div class="gallery-grid-matrix" id="galleryGridMatrix">
+                        
+                        <!-- PHOTO 1: The Initial Entry -->
+                        <div class="gallery-item-card-wrapper filter-node candid" data-item-id="1">
+                            <div class="item-inner-container">
+                                <div class="item-image-viewport">
+                                    <div class="item-image-shimmer-placeholder"></div>
+                                    <img class="lazy-gallery-image" src="images/photo1.jpg" alt="Birthday Celebration Visual Record 1" loading="lazy">
+                                    <div class="item-interactive-overlay">
+                                        <div class="overlay-action-icon">🔍</div>
+                                    </div>
+                                </div>
+                                <div class="item-metadata-footer">
+                                    <div class="meta-left-block">
+                                        <span class="meta-index-label">FILE_NODE // 01</span>
+                                        <h5 class="meta-title-label">Spontaneous Capture</h5>
+                                    </div>
+                                    <span class="meta-tag-label">CANDID</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PHOTO 2: The Horizon Scope -->
+                        <div class="gallery-item-card-wrapper filter-node lifestyle" data-item-id="2">
+                            <div class="item-inner-container">
+                                <div class="item-image-viewport">
+                                    <div class="item-image-shimmer-placeholder"></div>
+                                    <img class="lazy-gallery-image" src="images/photo2.jpg" alt="Birthday Celebration Visual Record 2" loading="lazy">
+                                    <div class="item-interactive-overlay">
+                                        <div class="overlay-action-icon">🔍</div>
+                                    </div>
+                                </div>
+                                <div class="item-metadata-footer">
+                                    <div class="meta-left-block">
+                                        <span class="meta-index-label">FILE_NODE // 02</span>
+                                        <h5 class="meta-title-label">Structured Perspective</h5>
+                                    </div>
+                                    <span class="meta-tag-label">LIFESTYLE</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PHOTO 3: Prime Landmark -->
+                        <div class="gallery-item-card-wrapper filter-node milestone" data-item-id="3">
+                            <div class="item-inner-container">
+                                <div class="item-image-viewport">
+                                    <div class="item-image-shimmer-placeholder"></div>
+                                    <img class="lazy-gallery-image" src="images/photo3.jpg" alt="Birthday Celebration Visual Record 3" loading="lazy">
+                                    <div class="item-interactive-overlay">
+                                        <div class="overlay-action-icon">🔍</div>
+                                    </div>
+                                </div>
+                                <div class="item-metadata-footer">
+                                    <div class="meta-left-block">
+                                        <span class="meta-index-label">FILE_NODE // 03</span>
+                                        <h5 class="meta-title-label">The Peak Occasion</h5>
+                                    </div>
+                                    <span class="meta-tag-label">CELEBRATION</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PHOTO 4: Focused Reflection -->
+                        <div class="gallery-item-card-wrapper filter-node candid" data-item-id="4">
+                            <div class="item-inner-container">
+                                <div class="item-image-viewport">
+                                    <div class="item-image-shimmer-placeholder"></div>
+                                    <img class="lazy-gallery-image" src="images/photo4.jpg" alt="Birthday Celebration Visual Record 4" loading="lazy">
+                                    <div class="item-interactive-overlay">
+                                        <div class="overlay-action-icon">🔍</div>
+                                    </div>
+                                </div>
+                                <div class="item-metadata-footer">
+                                    <div class="meta-left-block">
+                                        <span class="meta-index-label">FILE_NODE // 04</span>
+                                        <h5 class="meta-title-label">In The Element</h5>
+                                    </div>
+                                    <span class="meta-tag-label">CANDID</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PHOTO 5: Elite Vibe -->
+                        <div class="gallery-item-card-wrapper filter-node lifestyle" data-item-id="5">
+                            <div class="item-inner-container">
+                                <div class="item-image-viewport">
+                                    <div class="item-image-shimmer-placeholder"></div>
+                                    <img class="lazy-gallery-image" src="images/photo5.jpg" alt="Birthday Celebration Visual Record 5" loading="lazy">
+                                    <div class="item-interactive-overlay">
+                                        <div class="overlay-action-icon">🔍</div>
+                                    </div>
+                                </div>
+                                <div class="item-metadata-footer">
+                                    <div class="meta-left-block">
+                                        <span class="meta-index-label">FILE_NODE // 05</span>
+                                        <h5 class="meta-title-label">Refined Composition</h5>
+                                    </div>
+                                    <span class="meta-tag-label">LIFESTYLE</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PHOTO 6: Closing Celebration Marker -->
+                        <div class="gallery-item-card-wrapper filter-node milestone" data-item-id="6">
+                            <div class="item-inner-container">
+                                <div class="item-image-viewport">
+                                    <div class="item-image-shimmer-placeholder"></div>
+                                    <img class="lazy-gallery-image" src="images/photo6.jpg" alt="Birthday Celebration Visual Record 6" loading="lazy">
+                                    <div class="item-interactive-overlay">
+                                        <div class="overlay-action-icon">🔍</div>
+                                    </div>
+                                </div>
+                                <div class="item-metadata-footer">
+                                    <div class="meta-left-block">
+                                        <span class="meta-index-label">FILE_NODE // 06</span>
+                                        <h5 class="meta-title-label">Premium Legacy Frame</h5>
+                                    </div>
+                                    <span class="meta-tag-label">CELEBRATION</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- SECTION 5: INTERACTIVE VIRTUAL CELEBRATION MATRIX & TOAST INTERFACE -->
+            <section id="virtualCelebrationComplex" class="celebration-matrix-viewport">
+                <div class="matrix-structural-background-text">CEREMONY</div>
+                
+                <div class="matrix-layout-container">
+                    <!-- Component Header Block -->
+                    <div class="matrix-section-header" data-aos="fade-up">
+                        <div class="matrix-metadata-row">
+                            <span class="matrix-serial-node">// MODULE 02 // LIVE ENGAGEMENT</span>
+                            <div class="matrix-decorative-line-accent"></div>
+                        </div>
+                        <h3 class="matrix-primary-heading">THE VIRTUAL CELEBRATION DECK</h3>
+                        <p class="matrix-lead-paragraph">An interactive interactive ritual space designed to replicate a premium live celebration event. Spark the visual engine below to unlock the ceremonial state.</p>
+                    </div>
+
+                    <!-- Main Dual-Column Ceremony Layout -->
+                    <div class="matrix-dual-grid">
+                        
+                        <!-- Left Column: The 3D Layered Cake Interactive Engine Container -->
+                        <div class="matrix-column-interactive" data-aos="zoom-in-right">
+                            <div class="interactive-stage-card-substrate">
+                                <div class="stage-glass-glare-effect"></div>
+                                
+                                <div class="cake-ceremony-engine-wrapper" id="cakeEngineWrapper">
+                                    <div class="cake-status-badge" id="cakeStatusBadge" data-state="intact">SYSTEM_STATUS: READY FOR INTERACTION</div>
+                                    
+                                    <!-- The Physical 3D Cake Structure Viewport -->
+                                    <div class="cake-visual-viewport-3d">
+                                        <div class="cake-shadow-blur-layer"></div>
+                                        
+                                        <!-- Cake Stand Structural Base Plate -->
+                                        <div class="cake-stand-base-plate">
+                                            <div class="stand-rim-shine"></div>
+                                            <div class="stand-pillar-support"></div>
+                                        </div>
+                                        
+                                        <!-- Tier 3: Supreme Top Layer -->
+                                        <div class="cake-tier tier-top" id="cakeTier3" data-tier="3">
+                                            <div class="tier-wall-shimmer"></div>
+                                            <div class="tier-frosting-drips">
+                                                <span class="drip-node drip-1"></span>
+                                                <span class="drip-node drip-2"></span>
+                                                <span class="drip-node drip-3"></span>
+                                                <span class="drip-node drip-4"></span>
+                                                <span class="drip-node drip-5"></span>
+                                            </div>
+                                            
+                                            <!-- Interactive Candlestick Engine Matrix -->
+                                            <div class="candlestick-array-matrix">
+                                                <div class="candle-node candle-primary" id="mainCandleNode">
+                                                    <div class="candle-wax-body">
+                                                        <div class="wax-stripe-accent"></div>
+                                                    </div>
+                                                    <div class="candle-wick-element"></div>
+                                                    <!-- Dynamic Flame Control Subsystem -->
+                                                    <div class="candle-flame-system burning" id="candleFlameCore">
+                                                        <div class="flame-layer flame-core"></div>
+                                                        <div class="flame-layer flame-mid"></div>
+                                                        <div class="flame-layer flame-outer"></div>
+                                                        <div class="flame-sparkle-emitter"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tier 2: Mid Foundation Layer -->
+                                        <div class="cake-tier tier-middle" id="cakeTier2" data-tier="2">
+                                            <div class="tier-wall-shimmer"></div>
+                                            <div class="cake-surface-piping-decoration">
+                                                <span class="piping-bud bud-1"></span>
+                                                <span class="piping-bud bud-2"></span>
+                                                <span class="piping-bud bud-3"></span>
+                                                <span class="piping-bud bud-4"></span>
+                                                <span class="piping-bud bud-5"></span>
+                                                <span class="piping-bud bud-6"></span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tier 1: Ground Master Base Layer -->
+                                        <div class="cake-tier tier-base" id="cakeTier1" data-tier="1">
+                                            <div class="tier-wall-shimmer"></div>
+                                            <div class="celebration-plaque-engraving">
+                                                <span class="engraved-text">EXCELLENCE // 2026</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Interactive Dashboard Control Panel for the Cake Engine -->
+                                    <div class="cake-control-dashboard-panel">
+                                        <div class="dashboard-instruction-row">
+                                            <span class="dashboard-step-counter">STEP 01</span>
+                                            <p class="dashboard-step-instruction" id="cakeInstructionText">Blow out the digital candle flame to trigger confetti matrix deployment routines.</p>
+                                        </div>
+                                        
+                                        <div class="dashboard-action-button-group">
+                                            <button class="control-action-btn action-blow" id="actionBlowFlameBtn">
+                                                <span class="btn-glow-contour"></span>
+                                                <span class="btn-inner-content-wrapper">
+                                                    <span class="btn-icon-node">💨</span>
+                                                    <span class="btn-text-main-node">BLOW OUT FLAME</span>
+                                                </span>
+                                            </button>
+                                            
+                                            <button class="control-action-btn action-slice disabled" id="actionSliceCakeBtn" disabled>
+                                                <span class="btn-glow-contour"></span>
+                                                <span class="btn-inner-content-wrapper">
+                                                    <span class="btn-icon-node">🔪</span>
+                                                    <span class="btn-text-main-node">CUT CELEBRATION CAKE</span>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: High-Fidelity Interactive Toast & Messaging Panel -->
+                        <div class="matrix-column-narrative" data-aos="zoom-in-left">
+                            <div class="toast-board-card-substrate">
+                                <div class="board-header-metadata">
+                                    <span class="board-title-label">DIGITAL LIVE LOG FEED</span>
+                                    <div class="board-status-pulse-container">
+                                        <span class="status-pulse-dot"></span>
+                                        <span class="status-pulse-text">STREAMING_WISHES_ONLINE</span>
+                                    </div>
+                                </div>
+
+                                <!-- Deep Visual Scroller Containing Structured Incoming Messages -->
+                                <div class="toast-messages-scroll-viewport" id="toastMessageScrollViewport">
+                                    
+                                    <!-- Message Card Node 1 -->
+                                    <div class="toast-log-card-item premium-border">
+                                        <div class="card-item-top-row">
+                                            <div class="user-profile-signature-group">
+                                                <div class="avatar-fallback-placeholder ring-gold">JD</div>
+                                                <div class="identity-text-meta">
+                                                    <span class="identity-profile-name">Jonathan Drake</span>
+                                                    <span class="identity-profile-relationship">Executive Circle</span>
+                                                </div>
+                                            </div>
+                                            <span class="timestamp-stamp-node">JUST NOW</span>
+                                        </div>
+                                        <p class="toast-log-body-content">Wishing you an absolute powerhouse of a year ahead, blud. Your vision and work ethic continue to set standard-level bars for everyone around you. Enjoy every single second of your day!</p>
+                                    </div>
+
+                                    <!-- Message Card Node 2 -->
+                                    <div class="toast-log-card-item">
+                                        <div class="card-item-top-row">
+                                            <div class="user-profile-signature-group">
+                                                <div class="avatar-fallback-placeholder ring-silver">EC</div>
+                                                <div class="identity-text-meta">
+                                                    <span class="identity-profile-name">Elena Rostova</span>
+                                                    <span class="identity-profile-relationship">Creative Partner</span>
+                                                </div>
+                                            </div>
+                                            <span class="timestamp-stamp-node">2 MINS AGO</span>
+                                        </div>
+                                        <p class="toast-log-body-content">Happy Birthday! To one of the most creatively distinct minds I know. Thank you for always bringing unique energy and massive clarity to every project. Cheers to your new milestone layout!</p>
+                                    </div>
+
+                                    <!-- Message Card Node 3 -->
+                                    <div class="toast-log-card-item">
+                                        <div class="card-item-top-row">
+                                            <div class="user-profile-signature-group">
+                                                <div class="avatar-fallback-placeholder ring-bronze">MA</div>
+                                                <div class="identity-text-meta">
+                                                    <span class="identity-profile-name">Marcus Aurelius</span>
+                                                    <span class="identity-profile-relationship">Lifelong Friend</span>
+                                                </div>
+                                            </div>
+                                            <span class="timestamp-stamp-node">10 MINS AGO</span>
+                                        </div>
+                                        <p class="toast-log-body-content">Another year down, a massive journey ahead. Watching you conquer milestones consistently over the years has been a true inspiration. Keep building, keep leading, and keep thriving.</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- SECTION 6: INTERACTIVE TIME CAPSULE & MILESTONE CHRONICLE MATRIX -->
+            <section id="timeCapsuleChronicleSection" class="chronicle-matrix-viewport">
+                <div class="chronicle-structural-watermark">CHRONOLOGY</div>
+                
+                <div class="chronicle-layout-container">
+                    
+                    <!-- Deep Section Intro Header -->
+                    <div class="chronicle-section-header" data-aos="fade-up">
+                        <div class="chronicle-meta-row">
+                            <span class="chronicle-serial-tag">// LOG VOLUME 03 // DATA CHRONICLE</span>
+                            <div class="chronicle-header-divider-accent"></div>
+                        </div>
+                        <h3 class="chronicle-primary-heading">THE TIME CAPSULE CHRONICLES</h3>
+                        <p class="chronicle-lead-description">A multi-layered interactive log documenting structural growth metrics, mindset evolution paradigms, and historical milestones. Toggle through the historical milestones below.</p>
+                        
+                        <!-- Interactive Timeline Controller Nodes -->
+                        <div class="chronicle-control-navigation-bar" role="tablist" aria-label="Timeline Era Selector">
+                            <button class="chronicle-nav-chip active" data-era="foundation" role="tab" aria-selected="true">
+                                <span class="chip-number">01.</span> <span class="chip-label">FOUNDATION ERA</span>
+                            </button>
+                            <button class="chronicle-nav-chip" data-era="acceleration" role="tab" aria-selected="false">
+                                <span class="chip-number">02.</span> <span class="chip-label">ACCELERATION PHASE</span>
+                            </button>
+                            <button class="chronicle-nav-chip" data-era="apex" role="tab" aria-selected="false">
+                                <span class="chip-number">03.</span> <span class="chip-label">CURRENT APEX // 2026</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Master Chronological Track Layout -->
+                    <div class="chronicle-master-track" id="chronicleMasterTrack">
+                        <div class="track-center-spine-line">
+                            <div class="spine-progress-filler" id="timelineSpineProgress"></div>
+                        </div>
+
+                        <!-- TIMELINE EVENT NODE 1: Foundation Era -->
+                        <div class="chronicle-event-node-wrapper left-aligned active-era-node" data-node-era="foundation" data-aos="fade-right">
+                            <div class="event-node-spine-marker">
+                                <div class="marker-core-glow"></div>
+                                <div class="marker-pulse-ring"></div>
+                            </div>
+                            
+                            <div class="event-content-card-substrate">
+                                <div class="card-corner-tag">PHASE_01</div>
+                                <div class="card-header-meta">
+                                    <span class="event-date-stamp">HISTORICAL ORIGINS</span>
+                                    <h4 class="event-primary-title">Laying Down The Core Infrastructure</h4>
+                                </div>
+                                <div class="card-divider-line"></div>
+                                <div class="card-body-content-block">
+                                    <p class="event-descriptive-text">Every great structure requires an unshakeable foundation. This phase was defined by internal self-discovery, setting up mental fortitude, mapping out high-level personal principles, and building initial skillsets. This was where the discipline was quietly forged in the dark.</p>
+                                    
+                                    <!-- Inner Technical Metric Badges -->
+                                    <div class="event-sub-metrics-row">
+                                        <div class="sub-metric-box">
+                                            <span class="sub-metric-label">MINDSET STATE</span>
+                                            <span class="sub-metric-value">Observation & Focus</span>
+                                        </div>
+                                        <div class="sub-metric-box">
+                                            <span class="sub-metric-label">CORE ACHIEVED</span>
+                                            <span class="sub-metric-value">Unshakable Habits</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TIMELINE EVENT NODE 2: Acceleration Phase -->
+                        <div class="chronicle-event-node-wrapper right-aligned active-era-node" data-node-era="acceleration" data-aos="fade-left">
+                            <div class="event-node-spine-marker">
+                                <div class="marker-core-glow"></div>
+                                <div class="marker-pulse-ring"></div>
+                            </div>
+                            
+                            <div class="event-content-card-substrate">
+                                <div class="card-corner-tag">PHASE_02</div>
+                                <div class="card-header-meta">
+                                    <span class="event-date-stamp">THE VELOCITY PERIOD</span>
+                                    <h4 class="event-primary-title">Velocity, Expansion, and Execution</h4>
+                                </div>
+                                <div class="card-divider-line"></div>
+                                <div class="card-body-content-block">
+                                    <p class="event-descriptive-text">Plans shifted from theoretical blueprints to aggressive execution patterns. Barriers were broken down, the circle was refined to high-value individuals, and major skill sets scaled up exponentially. Momentum became an unstoppable force as compounding wins began stacking up visible results.</p>
+                                    
+                                    <div class="event-sub-metrics-row">
+                                        <div class="sub-metric-box">
+                                            <span class="sub-metric-label">EXECUTION RATE</span>
+                                            <span class="sub-metric-value">High Frequency</span>
+                                        </div>
+                                        <div class="sub-metric-box">
+                                            <span class="sub-metric-label">NETWORK DYNAMICS</span>
+                                            <span class="sub-metric-value">Curated & Verified</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TIMELINE EVENT NODE 3: Current Apex -->
+                        <div class="chronicle-event-node-wrapper left-aligned active-era-node" data-node-era="apex" data-aos="fade-right">
+                            <div class="event-node-spine-marker">
+                                <div class="marker-core-glow"></div>
+                                <div class="marker-pulse-ring"></div>
+                            </div>
+                            
+                            <div class="event-content-card-substrate apex-card-theme">
+                                <div class="card-corner-tag-premium">LIVE STATUS</div>
+                                <div class="card-header-meta">
+                                    <span class="event-date-stamp">PRESENT LANDMARK // 2026</span>
+                                    <h4 class="event-primary-title">The Master Builder Perspective</h4>
+                                </div>
+                                <div class="card-divider-line"></div>
+                                <div class="card-body-content-block">
+                                    <p class="event-descriptive-text">Standing at the current apex of your trajectory. This milestone is about absolute control, high-leverage decision-making, and operating with massive premium clarity. You are no longer just participating in the game; you are designing the landscape around you.</p>
+                                    
+                                    <div class="event-sub-metrics-row">
+                                        <div class="sub-metric-box">
+                                            <span class="sub-metric-label">STRATEGY LAYER</span>
+                                            <span class="sub-metric-value">Macro Visionary</span>
+                                        </div>
+                                        <div class="sub-metric-box">
+                                            <span class="sub-metric-label">CURRENT OUTLOOK</span>
+                                            <span class="sub-metric-value">Unlimited Expansion</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- SECTION 7: DYNAMIC VIRTUAL WISHING WELL & GREETING GRID -->
+            <section id="wishingWellInteractiveSection" class="wishing-well-viewport">
+                <div class="well-structural-watermark">MESSAGES</div>
+                
+                <div class="well-layout-container">
+                    
+                    <!-- Section Header Block -->
+                    <div class="well-section-header" data-aos="fade-up">
+                        <div class="well-meta-row">
+                            <span class="well-serial-tag">// LOG VOLUME 04 // INTERACTIVE GRID</span>
+                            <div class="well-header-divider-accent"></div>
+                        </div>
+                        <h3 class="well-primary-heading">THE GREETINGS MATRIX</h3>
+                        <p class="well-lead-description">A curated terminal containing detailed cards and wishes from your inner circle. Interact with each card node below to scale up the typography.</p>
+                    </div>
+
+                    <!-- Master Grid System for Cards -->
+                    <div class="well-grid-matrix" id="wishingWellGrid">
+                        
+                        <!-- WISH CARD NODE 1 -->
+                        <div class="wish-card-component grid-item-node" data-card-weight="premium" data-aos="flip-left">
+                            <div class="wish-card-inner-box">
+                                <div class="wish-card-glass-substrate"></div>
+                                <div class="wish-card-glaive-glow"></div>
+                                
+                                <div class="wish-card-header-block">
+                                    <div class="sender-avatar-node text-gold">👑</div>
+                                    <div class="sender-meta-group">
+                                        <h5 class="sender-name-string">Alpha Core Circle</h5>
+                                        <span class="sender-subtext-string">VIP Broadcast Network</span>
+                                    </div>
+                                    <span class="card-priority-badge">PREMIUM_LOG</span>
+                                </div>
+                                
+                                <div class="wish-card-body-block">
+                                    <p class="wish-card-prose-text">
+                                        Blud, words cannot fully describe the impact you make on a daily basis. Your relentless pursuit of excellence and uncompromised standard setting inspires everyone lucky enough to be in your orbit. May this milestone loop unlock the exact paths you have been designing for your legacy.
+                                    </p>
+                                </div>
+                                
+                                <div class="wish-card-footer-block">
+                                    <div class="footer-action-row">
+                                        <button class="card-expand-action-btn" aria-label="Expand detailed message node">
+                                            <span class="action-btn-text">READ FULL ENTRY</span>
+                                            <span class="action-btn-chevron">→</span>
+                                        </button>
+                                    </div>
+                                    <div class="card-system-stamp">SYS_REF_ID // 992-A</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- WISH CARD NODE 2 -->
+                        <div class="wish-card-component grid-item-node" data-card-weight="standard" data-aos="flip-right">
+                            <div class="wish-card-inner-box">
+                                <div class="wish-card-glass-substrate"></div>
+                                <div class="wish-card-glaive-glow"></div>
+                                
+                                <div class="wish-card-header-block">
+                                    <div class="sender-avatar-node text-silver">⚡</div>
+                                    <div class="sender-meta-group">
+                                        <h5 class="sender-name-string">The Synergy Team</h5>
+                                        <span class="sender-subtext-string">Operational Division</span>
+                                    </div>
+                                    <span class="card-priority-badge">SYS_LOG</span>
+                                </div>
+                                
+                                <div class="wish-card-body-block">
+                                    <p class="wish-card-prose-text">
+                                        Happy Birthday! Working alongside you is a lesson in absolute clarity, high frequency output, and execution mastery. You consistently transform challenges into clean, scannable victory strategies. Cheers to an exceptional year of execution!
+                                    </p>
+                                </div>
+                                
+                                <div class="wish-card-footer-block">
+                                    <div class="footer-action-row">
+                                        <button class="card-expand-action-btn" aria-label="Expand detailed message node">
+                                            <span class="action-btn-text">READ FULL ENTRY</span>
+                                            <span class="action-btn-chevron">→</span>
+                                        </button>
+                                    </div>
+                                    <div class="card-system-stamp">SYS_REF_ID // 401-B</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- WISH CARD NODE 3 -->
+                        <div class="wish-card-component grid-item-node" data-card-weight="standard" data-aos="flip-up">
+                            <div class="wish-card-inner-box">
+                                <div class="wish-card-glass-substrate"></div>
+                                <div class="wish-card-glaive-glow"></div>
+                                
+                                <div class="wish-card-header-block">
+                                    <div class="sender-avatar-node text-bronze">💎</div>
+                                    <div class="sender-meta-group">
+                                        <h5 class="sender-name-string">The Vision Council</h5>
+                                        <span class="sender-subtext-string">Strategic Advisory</span>
+                                    </div>
+                                    <span class="card-priority-badge">SYS_LOG</span>
+                                </div>
+                                
+                                <div class="wish-card-body-block">
+                                    <p class="wish-card-prose-text">
+                                        To the architect of so many grand ideas—may this year grant you uncompromised focus, high physical energy reserves, and deep intrinsic joy. Keep breaking rules that deserve to be broken and building empires that deserve to stand.
+                                    </p>
+                                </div>
+                                
+                                <div class="wish-card-footer-block">
+                                    <div class="footer-action-row">
+                                        <button class="card-expand-action-btn" aria-label="Expand detailed message node">
+                                            <span class="action-btn-text">READ FULL ENTRY</span>
+                                            <span class="action-btn-chevron">→</span>
+                                        </button>
+                                    </div>
+                                    <div class="card-system-stamp">SYS_REF_ID // 118-C</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- SECTION 8: CINEMATIC INTERACTIVE QUOTE HUB & FUTURE VISION BOARD -->
+            <section id="visionBoardQuoteHubSection" class="vision-hub-viewport">
+                <div class="vision-structural-watermark">HORIZON</div>
+                
+                <div class="vision-layout-container">
+                    
+                    <!-- Section Head Block -->
+                    <div class="vision-section-header" data-aos="fade-up">
+                        <div class="vision-meta-row">
+                            <span class="vision-serial-tag">// LOG VOLUME 05 // STRATEGIC OUTLOOK</span>
+                            <div class="vision-header-divider-accent"></div>
+                        </div>
+                        <h3 class="vision-primary-heading">THE FUTURE VISION BOARD</h3>
+                        <p class="vision-lead-description">A cinematic interactive mapping engine tracking incoming micro-targets, philosophical anchors, and macro execution strategies for the next 365-day iteration loop.</p>
+                    </div>
+
+                    <!-- Complex Grid Architecture for Vision Nodes -->
+                    <div class="vision-grid-matrix">
+                        
+                        <!-- LEFT TOWER: Core Philosophical Anchor -->
+                        <div class="vision-tower-left" data-aos="fade-right">
+                            <div class="tower-glass-substrate">
+                                <div class="tower-shimmer-layer"></div>
+                                <div class="tower-content-padding">
+                                    <div class="tower-icon-header">🔱</div>
+                                    <h4 class="tower-primary-title">The Sovereign Mindset</h4>
+                                    <div class="tower-divider-line"></div>
+                                    <p class="tower-prose-body">
+                                        "Do not look for external validation, nor expect others to map out the contours of your victory. Build your systems with such depth and structural integrity that their performance becomes independent of market opinion or fleeting emotional states."
+                                    </p>
+                                    <div class="tower-footer-signature">
+                                        <span class="signature-line"></span>
+                                        <span class="signature-title">FOUNDATIONAL PRINCIPLE 01</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT TOWER: Multi-Layer Macro Targets Grid -->
+                        <div class="vision-tower-right">
+                            <div class="targets-subgrid-matrix">
+                                
+                                <!-- Target Card 1 -->
+                                <div class="target-node-card" data-status="pending" data-aos="zoom-in">
+                                    <div class="target-card-inner">
+                                        <div class="target-status-row">
+                                            <span class="target-tag">METRIC_01</span>
+                                            <span class="status-chip-label">EXPANSION</span>
+                                        </div>
+                                        <h5 class="target-title-text">Cognitive Architecture</h5>
+                                        <p class="target-description-text">Deepening executive decision-making capabilities, structural framework optimization, and high-level strategy mastery loops.</p>
+                                        <div class="target-progress-bar-container">
+                                            <div class="target-progress-filler" style="width: 85%;"></div>
+                                        </div>
+                                        <span class="target-completion-percentage">85% INITIALIZED</span>
+                                    </div>
+                                </div>
+
+                                <!-- Target Card 2 -->
+                                <div class="target-node-card" data-status="active" data-aos="zoom-in" data-aos-delay="100">
+                                    <div class="target-card-inner">
+                                        <div class="target-status-row">
+                                            <span class="target-tag">METRIC_02</span>
+                                            <span class="status-chip-label">VELOCITY</span>
+                                        </div>
+                                        <h5 class="target-title-text">Execution Scalability</h5>
+                                        <p class="target-description-text">Automating high-frequency systems, removing communication drag, and multiplying output capacity across all ventures.</p>
+                                        <div class="target-progress-bar-container">
+                                            <div class="target-progress-filler" style="width: 90%;"></div>
+                                        </div>
+                                        <span class="target-completion-percentage">90% SYNCED</span>
+                                    </div>
+                                </div>
+
+                                <!-- Target Card 3 -->
+                                <div class="target-node-card" data-status="premium" data-aos="zoom-in" data-aos-delay="200">
+                                    <div class="target-card-inner">
+                                        <div class="target-status-row">
+                                            <span class="target-tag">METRIC_03</span>
+                                            <span class="status-chip-label">LEGACY</span>
+                                        </div>
+                                        <h5 class="target-title-text">Physical Fortification</h5>
+                                        <p class="target-description-text">Optimizing sleep bio-architectures, neural capacity reserves, and physical baseline output markers for uncompromised energy metrics.</p>
+                                        <div class="target-progress-bar-container">
+                                            <div class="target-progress-filler" style="width: 95%;"></div>
+                                        </div>
+                                        <span class="target-completion-percentage">95% UNLOCKED</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- SECTION 9: CINEMATIC FULLSCREEN MEDIA LIGHTBOX SYSTEM -->
+            <div id="galleryLightboxSystem" class="lightbox-overlay-wrapper visibility-hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Media Asset Zoom Viewer">
+                <div class="lightbox-backdrop-shimmer"></div>
+                <div class="lightbox-vignette-layer"></div>
+                
+                <!-- Inner Master Display Stage -->
+                <div class="lightbox-display-stage">
+                    
+                    <!-- Top Navigation & Control HUD -->
+                    <div class="lightbox-hud-header">
+                        <div class="hud-left-metadata">
+                            <span class="hud-serial-string">ASSET // LIVE_VIEW</span>
+                            <div class="hud-pulse-indicator">
+                                <span class="hud-pulse-dot"></span>
+                                <span class="hud-status-text" id="lightboxAssetStatus">RESOLVING_HD_SOURCE</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Control Action Button Elements -->
+                        <div class="hud-right-controls">
+                            <button id="lightboxZoomToggleBtn" class="hud-action-icon-btn" aria-label="Toggle 1:1 Scale Zoom">
+                                <span class="hud-btn-glyph">🔍</span>
+                            </button>
+                            <button id="lightboxCloseSystemTrigger" class="hud-action-icon-btn close-action-theme" aria-label="Terminate Lightbox System Overlay">
+                                <span class="hud-btn-glyph">✕</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Main Dynamic Media Viewport Layer -->
+                    <div class="lightbox-viewport-container" id="lightboxViewportContainer">
+                        <button id="lightboxPrevImageTrigger" class="lightbox-nav-arrow arrow-left" aria-label="Load Previous Gallery Asset">
+                            <span class="arrow-glyph">‹</span>
+                        </button>
+                        
+                        <div class="lightbox-image-render-frame">
+                            <!-- Target image source will be programmatically injected by Javascript via data attributes -->
+                            <img id="lightboxMasterImageTarget" src="" alt="Active HD Gallery Celebration Record View">
+                        </div>
+
+                        <button id="lightboxNextImageTrigger" class="lightbox-nav-arrow arrow-right" aria-label="Load Next Gallery Asset">
+                            <span class="arrow-glyph">›</span>
+                        </button>
+                    </div>
+
+                    <!-- Bottom Metadata Info Panel Descriptor -->
+                    <div class="lightbox-hud-footer">
+                        <div class="footer-metadata-cluster">
+                            <div class="cluster-left-row">
+                                <span class="cluster-index-counter" id="lightboxIndexCounter">IMAGE 00 OF 06</span>
+                                <div class="cluster-divider-bullet"></div>
+                                <h4 class="cluster-active-title" id="lightboxAssetTitle">Resolving Asset String...</h4>
+                            </div>
+                            <div class="cluster-right-row">
+                                <span class="cluster-tag-badge" id="lightboxAssetTag">SYSTEM_REF</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Mini Scrub Gallery Strip Matrix for Direct Navigation -->
+                        <div class="lightbox-scrub-strip-matrix" id="lightboxScrubMatrix">
+                            <div class="scrub-thumbnail-node active-node" data-target-index="1"><img src="images/photo1.jpg" alt="Thumb 1"></div>
+                            <div class="scrub-thumbnail-node" data-target-index="2"><img src="images/photo2.jpg" alt="Thumb 2"></div>
+                            <div class="scrub-thumbnail-node" data-target-index="3"><img src="images/photo3.jpg" alt="Thumb 3"></div>
+                            <div class="scrub-thumbnail-node" data-target-index="4"><img src="images/photo4.jpg" alt="Thumb 4"></div>
+                            <div class="scrub-thumbnail-node" data-target-index="5"><img src="images/photo5.jpg" alt="Thumb 5"></div>
+                            <div class="scrub-thumbnail-node" data-target-index="6"><img src="images/photo6.jpg" alt="Thumb 6"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Structural Frame Decor Layers to Match Cinematic Design Guidelines -->
+                <div class="lightbox-corner-accent l-top-l"></div>
+                <div class="lightbox-corner-accent l-top-r"></div>
+                <div class="lightbox-corner-accent l-bottom-l"></div>
+                <div class="lightbox-corner-accent l-bottom-r"></div>
+            </div>
+            <!-- SECTION 10: PREMIUM APPLICATION TERMINATION FOOTER -->
+            <footer id="globalApplicationFooter" class="master-footer-viewport">
+                <div class="footer-grid-overlay"></div>
+                <div class="footer-top-accent-line"></div>
+                
+                <div class="footer-layout-container">
+                    <div class="footer-master-grid">
+                        
+                        <!-- Left Pillar: Brand / Integrity Statement -->
+                        <div class="footer-column-brand">
+                            <div class="footer-brand-header">
+                                <span class="brand-glyph-accent">✨</span>
+                                <h4 class="brand-title-text">CELEBRATION DECK // 2026</h4>
+                            </div>
+                            <p class="brand-description-prose">
+                                A high-fidelity, premium digital experience crafted to mark a milestone year of focus, growth, and relentless execution. Designed and optimized with standard assets for absolute visual depth.
+                            </p>
+                        </div>
+
+                        <!-- Right Pillar: System Diagnostics & Control Indicators -->
+                        <div class="footer-column-status">
+                            <div class="status-panel-box">
+                                <span class="status-panel-title">SYSTEM DIAGNOSTICS</span>
+                                <div class="status-log-rows-container">
+                                    <div class="log-row-node">
+                                        <span class="log-label-string">CORE ENGINE:</span>
+                                        <span class="log-value-string text-green">ONLINE // ACTIVE</span>
+                                    </div>
+                                    <div class="log-row-node">
+                                        <span class="log-label-string">MEDIA ASSETS:</span>
+                                        <span class="log-value-string">6 CHANNELS HARDCODED</span>
+                                    </div>
+                                    <div class="log-row-node">
+                                        <span class="log-label-string">AUDIO SCRIPT:</span>
+                                        <span class="log-value-string text-gold">birthday.mp3 LOADED</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom Bar: Legal and Structural Termination Markers -->
+                    <div class="footer-bottom-bar-row">
+                        <div class="bar-left-copyright">
+                            <span>&copy; 2026 PRIVATE CELEBRATION ARCHIVE. ALL RIGHTS RESERVED.</span>
+                        </div>
+                        <div class="bar-right-signatures">
+                            <span class="signature-node">DESIGN_SYSTEM: PREMIUM_DARK</span>
+                            <div class="signature-dot-divider"></div>
+                            <span class="signature-node">BUILD: 4.9.0_MASSIVE</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+        </main>
+        <!-- END OF MAIN CONTENT STAGE -->
+
+    </div>
+    <!-- END OF APPLICATION ROOT CONTAINER -->
+
+    <!-- MASTER JAVASCRIPT ARCHITECTURE LINKAGE -->
+    <!-- This links directly to the script file we will build next -->
     <script src="script.js"></script>
 </body>
 </html>
