@@ -1,354 +1,431 @@
 /* ==========================================================================
-   AUTHENTICATION & SOUND ENGINE
+   AUTHENTICATION ENGINE, INITIAL STATE & MUSIC TIMING HOOKS
    ========================================================================== */
-const PASSCODE = "09"; // Set your preferred passcode here (e.g. "09" for Class 9th)
-const unlockBtn = document.getElementById('unlock-btn');
-const passInput = document.getElementById('password-input');
-const gatekeeper = document.getElementById('gatekeeper');
-const mainExp = document.getElementById('main-experience');
-const bgMusic = document.getElementById('bg-music');
-const errorMsg = document.getElementById('error-msg');
+const TARGET_KEY = "9"; // Matches Class 9th perfectly
+const docBody = document.body;
+const entryPanel = document.getElementById('gatekeeper');
+const appDashboard = document.getElementById('main-experience');
+const passKeyInput = document.getElementById('password-input');
+const triggerUnlockBtn = document.getElementById('unlock-btn');
+const systemErrorLog = document.getElementById('error-msg');
+const audioTrack = document.getElementById('bg-music');
 
-unlockBtn.addEventListener('click', attemptUnlock);
-passInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') attemptUnlock();
+triggerUnlockBtn.addEventListener('click', executeGatecheck);
+passKeyInput.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') executeGatecheck();
 });
 
-function attemptUnlock() {
-    if (passInput.value.trim() === PASSCODE) {
-        gatekeeper.classList.add('fade-out');
+function executeGatecheck() {
+    const localizedValue = passKeyInput.value.trim();
+    if (localizedValue === TARGET_KEY) {
+        entryPanel.classList.add('fade-out');
         setTimeout(() => {
-            gatekeeper.classList.add('hidden');
-            mainExp.classList.remove('hidden');
-            initExperience();
-        }, 1500);
+            entryPanel.classList.add('hidden');
+            appDashboard.classList.remove('hidden');
+            runGlobalSystems();
+        }, 2000);
     } else {
-        errorMsg.textContent = "That is not the key, but remember where you met...";
-        setTimeout(() => { errorMsg.textContent = ""; }, 4000);
+        systemErrorLog.textContent = "The code doesn't match... Think back to the classroom grade where it began.";
+        setTimeout(() => { systemErrorLog.textContent = ""; }, 5000);
     }
 }
 
-function initExperience() {
-    // Cinematic Soft Fade-In of Music (4-5 seconds)
-    bgMusic.volume = 0;
-    bgMusic.play().catch(err => console.log("Audio waiting for explicit interaction."));
-    let vol = 0;
-    const fadeInterval = setInterval(() => {
-        if (vol < 0.3) { // Caps volume comfortably at 30%
-            vol += 0.02;
-            bgMusic.volume = vol;
+function runGlobalSystems() {
+    // Cinematic Slow Audio AudioFade-In System (4-5 seconds tracking vector)
+    audioTrack.volume = 0;
+    audioTrack.play().catch(error => {
+        console.warn("Browser environment interaction model waiting for immediate tap state:", error);
+    });
+    
+    let targetVolumeMetric = 0;
+    const fadeAudioInterval = setInterval(() => {
+        if (targetVolumeMetric < 0.25) {
+            targetVolumeMetric += 0.01;
+            audioTrack.volume = targetVolumeMetric;
         } else {
-            clearInterval(fadeInterval);
+            clearInterval(fadeAudioInterval);
         }
-    }, 300);
+    }, 180);
 
-    initInteractiveCanvas();
-    initScrollTracker();
-    initFallingStars();
+    buildGlobalStarfield();
+    runScrollIntersectionMatrix();
+    runSparkleCursorEngine();
 }
 
 /* ==========================================================================
-   DIARY DIALOGUE (PAGE TURNING)
+   GLOBAL STARFIELD REPLICA BACKGROUND CANVAS ENGINE
    ========================================================================== */
-function turnPage(from, to) {
-    const fromPage = document.getElementById(`page-${from}`);
-    const toPage = document.getElementById(`page-${to}`);
-    if (fromPage && toPage) {
-        fromPage.classList.remove('active');
-        toPage.classList.add('active');
+function buildGlobalStarfield() {
+    const sCanvas = document.getElementById('starfieldCanvas');
+    const sCtx = sCanvas.getContext('2d');
+    let backgroundStars = [];
+
+    const calibrateStarfieldSize = () => {
+        sCanvas.width = window.innerWidth;
+        sCanvas.height = window.innerHeight;
+    };
+    calibrateStarfieldSize();
+    window.addEventListener('resize', calibrateStarfieldSize);
+
+    for (let index = 0; index < 120; index++) {
+        backgroundStars.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            radius: Math.random() * 0.9 + 0.1,
+            pulseFactor: Math.random() * 0.02 + 0.005,
+            opacityDirection: Math.random() > 0.5 ? 1 : -1,
+            opacity: Math.random()
+        });
+    }
+
+    function renderStarfieldLoop() {
+        sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
+        backgroundStars.forEach(bStar => {
+            bStar.opacity += bStar.pulseFactor * bStar.opacityDirection;
+            if (bStar.opacity >= 0.9 || bStar.opacity <= 0.1) {
+                bStar.opacityDirection *= -1;
+            }
+            sCtx.fillStyle = `rgba(255, 255, 255, ${bStar.opacity})`;
+            sCtx.beginPath();
+            sCtx.arc(bStar.x, bStar.y, bStar.radius, 0, Math.PI * 2);
+            sCtx.fill();
+        });
+        requestAnimationFrame(renderStarfieldLoop);
+    }
+    renderStarfieldLoop();
+}
+
+/* ==========================================================================
+   DIARY DIALOGUE CONTROL SEQUENCE (PAGE FLIPS)
+   ========================================================================== */
+function turnPage(currentPageId, targetPageId) {
+    const executionCurrentPage = document.getElementById(`page-${currentPageId}`);
+    const executionTargetPage = document.getElementById(`page-${targetPageId}`);
+    
+    if (executionCurrentPage && executionTargetPage) {
+        executionCurrentPage.classList.remove('active');
+        executionTargetPage.classList.add('active');
     }
 }
 
 /* ==========================================================================
-   ATMOSPHERE SKY CONTROLLER (SCROLL-BASED)
+   SCROLL OBSERVATION INTERSECTION MATRIX (THEME TRANSITIONS)
    ========================================================================== */
-function initScrollTracker() {
-    const sections = document.querySelectorAll('.story-section');
-    const options = { threshold: 0.45 }; // Changes sky when section is ~halfway visible
+function runScrollIntersectionMatrix() {
+    const internalSections = document.querySelectorAll('.story-section');
+    
+    const skyScrollConfig = {
+        threshold: 0.5,
+        rootMargin: "0px"
+    };
 
-    const observer = new IntersectionObserver((entries) => {
+    const skyIntersectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const skyTheme = entry.target.getAttribute('data-sky');
-                document.body.setAttribute('data-active-sky', skyTheme);
+                const acquiredSkyMetric = entry.target.getAttribute('data-sky');
+                docBody.setAttribute('data-active-sky', acquiredSkyMetric);
+                
+                // Track down matching embedded text components
+                const localizedQuote = entry.target.querySelector('.floating-quote');
+                if (localizedQuote) {
+                    localizedQuote.classList.add('visible-quote');
+                }
             }
         });
-    }, options);
+    }, skyScrollConfig);
 
-    sections.forEach(sec => observer.observe(sec));
+    internalSections.forEach(sectionBlock => skyIntersectionObserver.observe(sectionBlock));
 
-    // Also observe images inside Section 2 to reveal them elegantly on scroll
-    const cards = document.querySelectorAll('.photo-card');
-    const cardObserver = new IntersectionObserver((entries) => {
+    // Observe Individual Premium Image Elements Inside Section 2
+    const architecturalPhotoCards = document.querySelectorAll('.premium-photo-card');
+    const imageEntranceObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('reveal-card');
+                entry.target.classList.add('reveal-active');
             }
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.15, rootMargin: "0px" });
 
-    cards.forEach(card => cardObserver.observe(card));
+    architecturalPhotoCards.forEach(cardItem => imageEntranceObserver.observe(cardItem));
 }
 
 /* ==========================================================================
-   INTERACTIVE CANVAS (SPARKLE CURSOR TRAIL)
+   LUXURY INTERACTIVE CURSOR TRAIL ENGINE (SPARKLE CANVAS OBJECT)
    ========================================================================== */
-let canvas, ctx;
-let particles = [];
+let clusterCanvas, clusterCtx;
+let crystalParticlesArray = [];
 
-function initInteractiveCanvas() {
-    canvas = document.getElementById('sparkleCanvas');
-    ctx = canvas.getContext('2d');
-    resizeCanvas();
+function runSparkleCursorEngine() {
+    clusterCanvas = document.getElementById('sparkleCanvas');
+    clusterCtx = clusterCanvas.getContext('2d');
+    
+    const synchronizeCanvasDimensions = () => {
+        clusterCanvas.width = window.innerWidth;
+        clusterCanvas.height = window.innerHeight;
+    };
+    synchronizeCanvasDimensions();
+    window.addEventListener('resize', synchronizeCanvasDimensions);
 
-    window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('mousemove', addParticles);
-    window.addEventListener('touchmove', (e) => {
-        addParticles(e.touches[0]);
+    window.addEventListener('mousemove', deploySparkleCluster);
+    window.addEventListener('touchmove', (touchEvent) => {
+        deploySparkleCluster(touchEvent.touches[0]);
     });
 
-    animateParticles();
+    renderSparkleLoop();
 }
 
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-
-class Particle {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.size = Math.random() * 2.5 + 0.5;
-        this.speedX = Math.random() * 1.5 - 0.75;
-        this.speedY = Math.random() * 1.5 - 0.75;
-        this.color = `rgba(216, 180, 254, ${Math.random() * 0.7 + 0.3})`;
-        this.life = 1;
-        this.decay = Math.random() * 0.015 + 0.005;
+class LuxurySparkleDataNode {
+    constructor(coordinateX, coordinateY) {
+        this.x = coordinateX;
+        this.y = coordinateY;
+        this.radiusSize = Math.random() * 2 + 0.4;
+        this.vectorX = Math.random() * 1.8 - 0.9;
+        this.vectorY = Math.random() * 1.8 - 0.9;
+        this.particleColor = `rgba(233, 213, 255, ${Math.random() * 0.8 + 0.2})`;
+        this.particleLifespan = 1.0;
+        this.decayCoefficient = Math.random() * 0.012 + 0.006;
     }
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        this.life -= this.decay;
+    refreshVectorState() {
+        this.x += this.vectorX;
+        this.y += this.vectorY;
+        this.particleLifespan -= this.decayCoefficient;
     }
-    draw() {
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = this.life;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
+    paintNode() {
+        clusterCtx.fillStyle = this.particleColor;
+        clusterCtx.globalAlpha = this.particleLifespan;
+        clusterCtx.beginPath();
+        clusterCtx.arc(this.x, this.y, this.radiusSize, 0, Math.PI * 2);
+        clusterCtx.fill();
     }
 }
 
-function addParticles(e) {
-    for (let i = 0; i < 2; i++) {
-        particles.push(new Particle(e.clientX, e.clientY));
+function deploySparkleCluster(eventCoordinates) {
+    for (let loopCount = 0; loopCount < 3; loopCount++) {
+        crystalParticlesArray.push(new LuxurySparkleDataNode(eventCoordinates.clientX, eventCoordinates.clientY));
     }
 }
 
-function animateParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles = particles.filter(p => p.life > 0);
-    particles.forEach(p => {
-        p.update();
-        p.draw();
+function renderSparkleLoop() {
+    clusterCtx.clearRect(0, 0, clusterCanvas.width, clusterCanvas.height);
+    crystalParticlesArray = crystalParticlesArray.filter(node => node.particleLifespan > 0);
+    crystalParticlesArray.forEach(crystalNode => {
+        crystalNode.refreshVectorState();
+        crystalNode.paintNode();
     });
-    requestAnimationFrame(animateParticles);
+    requestAnimationFrame(renderSparkleLoop);
 }
 
 /* ==========================================================================
-   HIDDEN DISCOVERIES & ELEMENT INTERACTIONS
+   HIDDEN DISCOVERIES INTERACTION PACK
    ========================================================================== */
-// Click Moon -> Mini Starburst
-document.getElementById('moon-trigger').addEventListener('click', (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
-    for (let i = 0; i < 20; i++) {
-        particles.push(new Particle(x, y));
+// Moon Shatter Starburst
+document.getElementById('moon-trigger').addEventListener('click', (eventObj) => {
+    const dimensionBounds = eventObj.target.getBoundingClientRect();
+    const computedCenterX = dimensionBounds.left + dimensionBounds.width / 2;
+    const computedCenterY = dimensionBounds.top + dimensionBounds.height / 2;
+    for (let index = 0; index < 35; index++) {
+        let specializedSparkle = new LuxurySparkleDataNode(computedCenterX, computedCenterY);
+        specializedSparkle.vectorX = Math.random() * 6 - 3;
+        specializedSparkle.vectorY = Math.random() * 6 - 3;
+        crystalParticlesArray.push(specializedSparkle);
     }
 });
 
-// Butterfly & Flower Flutter/Scatter Animations
+// Ethereal Flight Butterfly Engine
 document.getElementById('butterfly').addEventListener('click', function() {
-    this.style.transition = "transform 1.5s cubic-bezier(0.25, 1, 0.5, 1)";
-    this.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * -250 - 50}px) scale(0)`;
+    this.style.transition = "transform 2s cubic-bezier(0.25, 1, 0.5, 1)";
+    this.style.transform = `translate(${Math.random() * 300 - 150}px, ${Math.random() * -300 - 100}px) scale(0) rotate(45deg)`;
     setTimeout(() => {
         this.style.transform = "none";
-    }, 4000);
+    }, 5000);
 });
 
-document.getElementById('flower').addEventListener('click', function(e) {
-    const rect = e.target.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top;
-    // Generate Falling Petals (Pink Particles)
-    for (let i = 0; i < 15; i++) {
-        let petal = new Particle(x, y);
-        petal.color = `rgba(244, 143, 177, ${Math.random() * 0.8 + 0.2})`;
-        petal.speedY = Math.random() * 2 + 1; // Slide straight down
-        particles.push(petal);
+// Blossom Spill Petal Mechanics
+document.getElementById('flower').addEventListener('click', function(event) {
+    const boundBox = event.target.getBoundingClientRect();
+    const sourceX = boundBox.left + boundBox.width / 2;
+    const sourceY = boundBox.top;
+    
+    for (let petalCount = 0; petalCount < 25; petalCount++) {
+        let flowerPetalNode = new LuxurySparkleDataNode(sourceX, sourceY);
+        flowerPetalNode.particleColor = `rgba(244, 143, 177, ${Math.random() * 0.8 + 0.2})`;
+        flowerPetalNode.vectorY = Math.random() * 2.5 + 1.2; // Linear falling speed configuration
+        flowerPetalNode.vectorX = Math.random() * 2 - 1;
+        flowerPetalNode.radiusSize = Math.random() * 3 + 1.5;
+        crystalParticlesArray.push(flowerPetalNode);
     }
 });
 
 /* ==========================================================================
-   FALLING STARS (SECTION 4 CANVAS BACKGROUND)
+   FALLING STARS BACKDROP LOGIC (SECTION 4 REGION)
    ========================================================================== */
-let starCanvas, starCtx;
-let stars = [];
+let matrixStarCanvas, matrixStarCtx;
+let sequenceStarsArray = [];
 
 function initFallingStars() {
-    starCanvas = document.getElementById('fallingStarsCanvas');
-    starCtx = starCanvas.getContext('2d');
+    matrixStarCanvas = document.getElementById('fallingStarsCanvas');
+    matrixStarCtx = matrixStarCanvas.getContext('2d');
     
-    const resizeStarCanvas = () => {
-        starCanvas.width = starCanvas.parentElement.clientWidth;
-        starCanvas.height = starCanvas.parentElement.clientHeight;
+    const recalibrateLocalCanvasSize = () => {
+        matrixStarCanvas.width = matrixStarCanvas.parentElement.clientWidth;
+        matrixStarCanvas.height = matrixStarCanvas.parentElement.clientHeight;
     };
-    resizeStarCanvas();
-    window.addEventListener('resize', resizeStarCanvas);
+    recalibrateLocalCanvasSize();
+    window.addEventListener('resize', recalibrateLocalCanvasSize);
 
-    for (let i = 0; i < 20; i++) {
-        stars.push({
-            x: Math.random() * starCanvas.width,
-            y: Math.random() * starCanvas.height - starCanvas.height,
-            length: Math.random() * 30 + 10,
-            speed: Math.random() * 3 + 2,
-            opacity: Math.random() * 0.5 + 0.2
+    for (let count = 0; count < 30; count++) {
+        sequenceStarsArray.push({
+            coordinateX: Math.random() * window.innerWidth,
+            coordinateY: Math.random() * matrixStarCanvas.height - matrixStarCanvas.height,
+            streakLength: Math.random() * 40 + 15,
+            movementSpeed: Math.random() * 4 + 3,
+            starOpacity: Math.random() * 0.6 + 0.2
         });
     }
-    animateFallingStars();
+    renderFallingStarsLoop();
 }
 
-function animateFallingStars() {
-    starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
-    stars.forEach(star => {
-        starCtx.strokeStyle = `rgba(255, 255, 255, ${star.opacity})`;
-        starCtx.lineWidth = 1;
-        starCtx.beginPath();
-        starCtx.moveTo(star.x, star.y);
-        starCtx.lineTo(star.x - star.length/2, star.y + star.length);
-        starCtx.stroke();
+function renderFallingStarsLoop() {
+    matrixStarCtx.clearRect(0, 0, matrixStarCanvas.width, matrixStarCanvas.height);
+    sequenceStarsArray.forEach(fallingNode => {
+        matrixStarCtx.strokeStyle = `rgba(255, 255, 255, ${fallingNode.starOpacity})`;
+        matrixStarCtx.lineWidth = 1.2;
+        matrixStarCtx.beginPath();
+        matrixStarCtx.moveTo(fallingNode.coordinateX, fallingNode.coordinateY);
+        matrixStarCtx.lineTo(fallingNode.coordinateX - fallingNode.streakLength / 2, fallingNode.coordinateY + fallingNode.streakLength);
+        matrixStarCtx.stroke();
 
-        star.y += star.speed;
-        star.x -= star.speed / 2;
+        fallingNode.coordinateY += fallingNode.movementSpeed;
+        fallingNode.coordinateX -= fallingNode.movementSpeed / 2;
 
-        if (star.y > starCanvas.height) {
-            star.y = -50;
-            star.x = Math.random() * starCanvas.width;
+        if (fallingNode.coordinateY > matrixStarCanvas.height) {
+            fallingNode.coordinateY = -60;
+            fallingNode.coordinateX = Math.random() * matrixStarCanvas.width;
         }
     });
-    requestAnimationFrame(animateFallingStars);
+    requestAnimationFrame(renderFallingStarsLoop);
 }
 
 /* ==========================================================================
-   CANDLE BLOW CINEMATIC (BLACKOUT -> SILENCE -> FIREWORKS)
+   THEATRICAL RITUAL CANDLE BLOW (BLACKOUT SYSTEM -> GRAND FIREWORKS)
    ========================================================================== */
-const candleTrigger = document.getElementById('candle-trigger');
-const flame = document.getElementById('candle-flame');
-const blackout = document.getElementById('blackout');
-const hintText = document.getElementById('candle-hint-text');
-const finalSection = document.getElementById('section-5');
-const finalMessageBox = document.getElementById('final-message-box');
+const candleTriggerBox = document.getElementById('candle-trigger');
+const visualFlame = document.getElementById('candle-flame');
+const blackoutLayer = document.getElementById('cinematic-blackout');
+const candleDialogueText = document.getElementById('candle-hint-text');
+const terminalSectionBox = document.getElementById('section-5');
+const theaterMessageBox = document.getElementById('final-message-box');
 
-candleTrigger.addEventListener('click', () => {
-    // 1. Extinguish Flame
-    flame.style.display = 'none';
-    hintText.textContent = "Wish made.";
+candleTriggerBox.addEventListener('click', () => {
+    // Extinguish fire state
+    visualFlame.style.display = 'none';
+    candleDialogueText.textContent = "Your wish is floating up to the heavens...";
 
-    // 2. Blackout Screen & Silence Audio Instantly
-    blackout.classList.add('active');
-    bgMusic.pause();
+    // Activate Cinematic Blackout and Instantly Halt Soundtrack
+    blackoutLayer.classList.add('active-darkness');
+    audioTrack.pause();
 
-    // 3. Cinematic Pause (1.5 Seconds)
+    // Enforce 1.5 Second High-Drama Suspense Pause
     setTimeout(() => {
-        // Remove blackout screen
-        blackout.classList.remove('active');
+        // Disengage theatrical blackout overlay
+        blackoutLayer.classList.remove('active-darkness');
         
-        // 4. Smoothly scroll into final scene
-        finalSection.scrollIntoView({ behavior: 'smooth' });
+        // Push view smoothly into terminal viewport
+        terminalSectionBox.scrollIntoView({ behavior: 'smooth' });
 
-        // 5. Restore Audio and Trigger Big Fireworks
-        bgMusic.play();
-        triggerFireworks();
+        // Spin up final ambient aurora canvas overlays and resume sound track
+        const visibleAuroras = document.querySelectorAll('.aurora-curtain');
+        visibleAuroras.forEach(auroraNode => auroraNode.style.opacity = "1");
         
-        // 6. Fade-in ending text
-        finalMessageBox.classList.add('revealed');
+        audioTrack.play();
+        igniteGrandFireworksEngine();
+        
+        // Disengage opacity block on final typographical element
+        theaterMessageBox.classList.add('theme-aurora', 'theater-revealed');
     }, 1500);
 });
 
 /* ==========================================================================
-   FIREWORKS ENGINE
+   GRAND FIREWORKS MATHEMATICS DESIGN SYSTEM
    ========================================================================== */
-let fCanvas, fCtx;
-let fParticles = [];
+let fireworkCanvasRef, fireworkCtxRef;
+let detonationFragmentsArray = [];
 
-function triggerFireworks() {
-    fCanvas = document.getElementById('fireworksCanvas');
-    fCanvas.classList.remove('hidden-canvas');
-    fCtx = fCanvas.getContext('2d');
+function igniteGrandFireworksEngine() {
+    fireworkCanvasRef = document.getElementById('fireworksCanvas');
+    fireworkCtxRef = fireworkCanvasRef.getContext('2d');
     
-    fCanvas.width = fCanvas.parentElement.clientWidth;
-    fCanvas.height = fCanvas.parentElement.clientHeight;
+    fireworkCanvasRef.width = fireworkCanvasRef.parentElement.clientWidth;
+    fireworkCanvasRef.height = fireworkCanvasRef.parentElement.clientHeight;
 
-    // Launch initial firework burst coordinates
-    for (let b = 0; b < 5; b++) {
+    // Sequence out distinct high-altitude detonation patterns
+    for (let explosiveIndex = 0; explosiveIndex < 6; explosiveIndex++) {
         setTimeout(() => {
-            createExplosion(Math.random() * fCanvas.width, Math.random() * (fCanvas.height * 0.6) + 100);
-        }, b * 400);
+            generateDetonationCoordinates(
+                Math.random() * fireworkCanvasRef.width, 
+                Math.random() * (fireworkCanvasRef.height * 0.5) + 80
+            );
+        }, explosiveIndex * 450);
     }
     
-    animateFireworks();
+    executeFireworksAnimationLoop();
 }
 
-function createExplosion(x, y) {
-    const colors = ['#f3e8ff', '#d8b4fe', '#a78bfa', '#ffb7b2', '#ffdac1'];
-    for (let i = 0; i < 50; i++) {
-        fParticles.push({
-            x: x,
-            y: y,
-            speedX: Math.random() * 6 - 3,
-            speedY: Math.random() * 6 - 3,
-            color: colors[Math.floor(Math.random() * colors.length)],
-            life: 1,
-            decay: Math.random() * 0.02 + 0.01
+function generateDetonationCoordinates(targetOriginX, targetOriginY) {
+    const spectralPalettes = ['#ffffff', '#e9d5ff', '#c084fc', '#f472b6', '#fed7aa', '#38bdf8'];
+    for (let fragmentsCount = 0; fragmentsCount < 60; fragmentsCount++) {
+        detonationFragmentsArray.push({
+            posX: targetOriginX,
+            posY: targetOriginY,
+            velocityVectorX: Math.random() * 8 - 4,
+            velocityVectorY: Math.random() * 8 - 4,
+            renderedColor: spectralPalettes[Math.floor(Math.random() * spectralPalettes.length)],
+            fragmentLifespan: 1.0,
+            burnRate: Math.random() * 0.015 + 0.008
         });
     }
 }
 
-function animateFireworks() {
-    fCtx.clearRect(0, 0, fCanvas.width, fCanvas.height);
-    fParticles = fParticles.filter(p => p.life > 0);
+function executeFireworksAnimationLoop() {
+    fireworkCtxRef.clearRect(0, 0, fireworkCanvasRef.width, fireworkCanvasRef.height);
+    detonationFragmentsArray = detonationFragmentsArray.filter(fragment => fragment.fragmentLifespan > 0);
     
-    fParticles.forEach(p => {
-        p.x += p.speedX;
-        p.y += p.speedY;
-        p.speedY += 0.04; // Gravity pull
-        p.life -= p.decay;
+    detonationFragmentsArray.forEach(fragNode => {
+        fragNode.posX += fragNode.velocityVectorX;
+        fragNode.posY += fragNode.velocityVectorY;
+        fragNode.velocityVectorY += 0.05; // Simulate standard gravity downforce matrix
+        fragNode.fragmentLifespan -= fragNode.burnRate;
 
-        fCtx.fillStyle = p.color;
-        fCtx.globalAlpha = p.life;
-        fCtx.beginPath();
-        fCtx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-        fCtx.fill();
+        fireworkCtxRef.fillStyle = fragNode.renderedColor;
+        fireworkCtxRef.globalAlpha = fragNode.fragmentLifespan;
+        fireworkCtxRef.beginPath();
+        fireworkCtxRef.arc(fragNode.posX, fragNode.posY, 2, 0, Math.PI * 2);
+        fireworkCtxRef.fill();
     });
 
-    if (fParticles.length > 0) {
-        requestAnimationFrame(animateFireworks);
+    if (detonationFragmentsArray.length > 0) {
+        requestAnimationFrame(executeFireworksAnimationLoop);
     }
 }
 
 /* ==========================================================================
-   THE SECRET PORTAL STAR (HIDDEN STAR MODAL)
+   THE UNCOMPROMISED GLITCH STAR MODAL CONTROLLER
    ========================================================================== */
-const secretStar = document.getElementById('secret-star-btn');
-const secretPortal = document.getElementById('secret-portal');
-const closePortal = document.getElementById('close-portal-btn');
+const hiddenGlitchStarTrigger = document.getElementById('secret-star-btn');
+const layoutPortalOverlay = document.getElementById('secret-portal');
+const interfacePortalCloseButton = document.getElementById('close-portal-btn');
 
-secretStar.addEventListener('click', () => {
-    secretPortal.classList.add('active');
+hiddenGlitchStarTrigger.addEventListener('click', () => {
+    layoutPortalOverlay.classList.add('portal-visible');
 });
 
-closePortal.addEventListener('click', () => {
-    secretPortal.classList.remove('active');
+interfacePortalCloseButton.addEventListener('click', () => {
+    layoutPortalOverlay.classList.remove('portal-visible');
+});
+
+// Close hidden modal instantly if background area is targeted
+layoutPortalOverlay.addEventListener('click', (modalEvent) => {
+    if (modalEvent.target === layoutPortalOverlay) {
+        layoutPortalOverlay.classList.remove('portal-visible');
+    }
 });
