@@ -5,176 +5,295 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Vanshika 🌙</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Font for elegant, minimal layout -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@100;200;300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Sparkle Canvas for cursor trail -->
+    <!-- Infinite Background Starfield Dynamic Canvas -->
+    <canvas id="starfieldCanvas"></canvas>
+    
+    <!-- Interactive Mouse and Touch Particle Trail Canvas -->
     <canvas id="sparkleCanvas"></canvas>
 
-    <!-- Hidden Background Audio (Using a placeholder royalty-free soft piano track; swap with your own link!) -->
-    <audio id="bg-music" loop>
+    <!-- Background Ambient Cinematic Audio -->
+    <audio id="bg-music" loop preload="auto">
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- 1. PASSCODE GATEWAY -->
+    <!-- 1. INTRO PASSCODE GATEWAY -->
     <div id="gatekeeper" class="gatekeeper">
+        <div class="gate-ambient-glow"></div>
         <div class="gate-content">
-            <h1 class="fade-in-text">A Dream to Walk Through</h1>
-            <p class="fade-in-sub">Enter the date you became brother & sister (e.g., DDMMYYYY or a special password)</p>
-            <div class="input-container">
-                <input type="password" id="password-input" placeholder="Enter password..." autocomplete="off">
-                <button id="unlock-btn">Enter</button>
+            <h1 class="gate-title">A Dream to Walk Through</h1>
+            <p class="gate-subtitle">Enter the number of the class where two paths crossed and a lifelong bond began.</p>
+            <div class="input-wrapper">
+                <input type="password" id="password-input" placeholder="Enter password..." autocomplete="off" maxlength="10">
+                <button id="unlock-btn" class="unlock-button">
+                    <span class="btn-text">Unlock World</span>
+                    <span class="btn-glow"></span>
+                </button>
             </div>
             <p id="error-msg" class="error-msg"></p>
         </div>
     </div>
 
-    <!-- MAIN EXPERIENCE (Hidden until unlocked) -->
-    <main id="main-experience" class="hidden">
+    <!-- MAIN IMMERSIVE EXPERIENCE -->
+    <main id="main-experience" class="main-experience hidden">
 
-        <!-- SECTION 1: Dark Sky -->
+        <!-- SECTION 1: THE DARK SKY & DIARY -->
         <section class="story-section" id="section-1" data-sky="dark">
-            <div class="floating-quote">"Some people become memories without trying."</div>
+            <div class="floating-quote" id="quote-1">"Some people become memories without trying."</div>
+            
             <div class="section-content">
-                <div class="interactive-moon" id="moon-trigger" title="Tap the moon...">🌙</div>
+                <div class="moon-wrapper">
+                    <div class="interactive-moon" id="moon-trigger" title="Touch the moon to shatter the sky...">🌙</div>
+                    <div class="moon-aura"></div>
+                </div>
+                
                 <h2 class="section-title">The Words I Wanted To Say</h2>
+                
                 <div class="diary-container">
+                    <div class="diary-glow-layer"></div>
+                    
+                    <!-- Page 1 -->
                     <div class="diary-page active" id="page-1">
-                        <h3>💌 Letter 1: Welcome</h3>
-                        <p>Welcome to this little corner of the universe. We met in class ninth, two strangers sitting in a classroom, and somehow, the stars aligned to make us brother and sister. This is a journey of those years...</p>
-                        <button class="next-page-btn" onclick="turnPage(1, 2)">Turn Page →</button>
+                        <div class="page-header">
+                            <span class="page-marker">💌 Chapter I</span>
+                        </div>
+                        <h3>Welcome to the Universe We Built</h3>
+                        <p class="page-text">Welcome to this little corner of the cosmos. Back in class ninth, we were just two individual stars floating around in a chaotic school classroom. We had no idea that a simple seat assignment or a random conversation would completely alter our trajectories. This website is a living, breathing testament to that beautiful journey.</p>
+                        <div class="page-footer">
+                            <button class="next-page-btn" onclick="turnPage(1, 2)">Turn Page Forward →</button>
+                        </div>
                     </div>
+                    
+                    <!-- Page 2 -->
                     <div class="diary-page" id="page-2">
-                        <h3>💜 Letter 2: What I Admire</h3>
-                        <p>I’ve always admired your kindness, Vanshika. In a world that can be so loud and cold, your gentle spirit is a constant warmth. You have this incredible gift of making the world brighter just by being yourself.</p>
-                        <button class="next-page-btn" onclick="turnPage(2, 3)">Turn Page →</button>
+                        <div class="page-header">
+                            <span class="page-marker">💜 Chapter II</span>
+                        </div>
+                        <h3>The Spirit I Admire</h3>
+                        <p class="page-text">If there is one thing that has remained absolutely constant through all these years, Vanshika, it is your soul. In a world that often grows cold, busy, or unfeeling, your genuine kindness stands out like a brilliant beacon. You possess an exquisite ability to lift people up simply by existing in their space, and I admire that more than words can ever capture.</p>
+                        <div class="page-footer">
+                            <button class="next-page-btn" onclick="turnPage(2, 3)">Turn Page Forward →</button>
+                        </div>
                     </div>
+                    
+                    <!-- Page 3 -->
                     <div class="diary-page" id="page-3">
-                        <h3>🌸 Letter 3: Wishes For Your Future</h3>
-                        <p>My wish for you is simple: may you find paths that make your heart sing, and may you never doubt how deeply cared for you are. Whatever dreams you chase, I'm always cheering for you.</p>
-                        <button class="next-page-btn" onclick="turnPage(3, 4)">Turn Page →</button>
+                        <div class="page-header">
+                            <span class="page-marker">🌸 Chapter III</span>
+                        </div>
+                        <h3>A Collection of Wishes</h3>
+                        <p class="page-text">As you step forward today into a brand new chapter of your life, my wishes for you are boundless. May you find trails that make your soul catch fire with joy. May you never lose that brilliant smile that defeats darkness instantly. Never doubt your strength, your capability, or your profound worth. You are built for beautiful things.</p>
+                        <div class="page-footer">
+                            <button class="next-page-btn" onclick="turnPage(3, 4)">Turn Page Forward →</button>
+                        </div>
                     </div>
+                    
+                    <!-- Page 4 -->
                     <div class="diary-page" id="page-4">
-                        <h3>🌙 Letter 4: As Years Pass</h3>
-                        <p>No matter how fast time moves or where life takes us, the bond we forged back in class ninth remains anchored. I am incredibly proud and lucky to call you my sister.</p>
-                        <button class="next-page-btn" onclick="turnPage(4, 5)">Turn Page →</button>
+                        <div class="page-header">
+                            <span class="page-marker">🌙 Chapter IV</span>
+                        </div>
+                        <h3>As the Years Drift By</h3>
+                        <p class="page-text">Time is a strange thing. It moves quickly, rewriting landscapes and changing everything around us. Yet, despite the chaotic rush of growing up, our bond has stayed anchored. We evolved from classmates to the deepest version of brother and sister. No distance, no schedule, and no phase of life will ever shake this foundation.</p>
+                        <div class="page-footer">
+                            <button class="next-page-btn" onclick="turnPage(4, 5)">Turn Page Forward →</button>
+                        </div>
                     </div>
+                    
+                    <!-- Page 5 -->
                     <div class="diary-page" id="page-5">
-                        <h3>✨ Final Letter: Happy Birthday</h3>
-                        <p>Today is entirely yours. Close your eyes, breathe in the peace of this moment, and step forward into your next beautiful year.</p>
-                        <button class="next-page-btn reset-page-btn" onclick="turnPage(5, 1)">Read Again ↺</button>
+                        <div class="page-header">
+                            <span class="page-marker">✨ The Final Chapter</span>
+                        </div>
+                        <h3>Happy Birthday, Sis</h3>
+                        <p class="page-text">This day belongs entirely to you. Take a long, slow breath. Let the tranquility of this night wrap around you, and know that you are deeply loved, fiercely protected, and endlessly celebrated. Happy Birthday to my favorite human in the world.</p>
+                        <div class="page-footer">
+                            <button class="next-page-btn reset-page-btn" onclick="turnPage(5, 1)">Return to Beginning ↺</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="scroll-prompt">Scroll down slowly ↓</div>
+            
+            <div class="scroll-indicator">
+                <span class="scroll-text">Scroll Down Into the Dream</span>
+                <span class="scroll-arrow">↓</span>
+            </div>
         </section>
 
-        <!-- SECTION 2: Purple Sky & Fog -->
+        <!-- SECTION 2: THE PURPLE SKY, FOG & CINEMATIC GALLERY -->
         <section class="story-section" id="section-2" data-sky="purple">
-            <div class="fog-overlay"></div>
-            <div class="floating-quote">"Every smile leaves a little light behind."</div>
+            <div class="fog-container">
+                <div class="fog-wave fog-wave-1"></div>
+                <div class="fog-wave fog-wave-2"></div>
+            </div>
+            <div class="floating-quote" id="quote-2">"Every smile leaves a little light behind."</div>
+            
             <div class="section-content">
                 <h2 class="section-title">Memories That Stayed</h2>
                 
-                <div class="gallery-container">
-                    <!-- Photo 1: Left Entrance -->
-                    <div class="photo-card slide-left animate-on-scroll">
-                        <div class="img-placeholder">[ Photo 1 Placeholder ]</div>
-                        <p class="caption">Class 9th chaos: where it all began.</p>
+                <div class="gallery-grid">
+                    <!-- Photo Card 1: Slide from Left -->
+                    <div class="premium-photo-card slide-left-trigger">
+                        <div class="photo-frame">
+                            <div class="photo-artwork design-gradient-1"></div>
+                            <div class="photo-overlay-shimmer"></div>
+                        </div>
+                        <div class="photo-details">
+                            <span class="photo-index">01 // THE CROSSROAD</span>
+                            <p class="photo-caption">Class 9th chaos: where our parallel lives crossed paths.</p>
+                        </div>
                     </div>
-                    <!-- Photo 2: Right Entrance -->
-                    <div class="photo-card slide-right animate-on-scroll">
-                        <div class="img-placeholder">[ Photo 2 Placeholder ]</div>
-                        <p class="caption">The laughter we shared on gloomy days.</p>
+
+                    <!-- Photo Card 2: Slide from Right -->
+                    <div class="premium-photo-card slide-right-trigger">
+                        <div class="photo-frame">
+                            <div class="photo-artwork design-gradient-2"></div>
+                            <div class="photo-overlay-shimmer"></div>
+                        </div>
+                        <div class="photo-details">
+                            <span class="photo-index">02 // UNFILTERED JOY</span>
+                            <p class="photo-caption">The historic laughter shared on the darkest winter mornings.</p>
+                        </div>
                     </div>
-                    <!-- Photo 3: Zoom In -->
-                    <div class="photo-card zoom-in animate-on-scroll">
-                        <div class="img-placeholder">[ Photo 3 Placeholder ]</div>
-                        <p class="caption">A moment frozen in perfect silence.</p>
+
+                    <!-- Photo Card 3: Zoom In -->
+                    <div class="premium-photo-card zoom-in-trigger">
+                        <div class="photo-frame">
+                            <div class="photo-artwork design-gradient-3"></div>
+                            <div class="photo-overlay-shimmer"></div>
+                        </div>
+                        <div class="photo-details">
+                            <span class="photo-index">03 // IN PERFECT SILENCE</span>
+                            <p class="photo-caption">A quiet afternoon frozen perfectly in time, safely kept inside.</p>
+                        </div>
                     </div>
-                    <!-- Photo 4: Rotate Slightly -->
-                    <div class="photo-card rotate-slight animate-on-scroll">
-                        <div class="img-placeholder">[ Photo 4 Placeholder ]</div>
-                        <p class="caption">The day we promised to stay family forever.</p>
+
+                    <!-- Photo Card 4: Rotate Slightly -->
+                    <div class="premium-photo-card rotate-slight-trigger">
+                        <div class="photo-frame">
+                            <div class="photo-artwork design-gradient-4"></div>
+                            <div class="photo-overlay-shimmer"></div>
+                        </div>
+                        <div class="photo-details">
+                            <span class="photo-index">04 // THE CHOSEN SACRED OATH</span>
+                            <p class="photo-caption">The day we decided to stay family forever, no matter what happens.</p>
+                        </div>
                     </div>
-                    <!-- Photo 5: Fade In -->
-                    <div class="photo-card fade-in-img animate-on-scroll">
-                        <div class="img-placeholder">[ Photo 5 Placeholder ]</div>
-                        <p class="caption">Little achievements, celebrated together.</p>
+
+                    <!-- Photo Card 5: Elegant Fade In -->
+                    <div class="premium-photo-card fade-in-trigger">
+                        <div class="photo-frame">
+                            <div class="photo-artwork design-gradient-5"></div>
+                            <div class="photo-overlay-shimmer"></div>
+                        </div>
+                        <div class="photo-details">
+                            <span class="photo-index">05 // TRIUMPHS AND STEPS</span>
+                            <p class="photo-caption">Celebrating the small steps, knowing big landmarks would follow.</p>
+                        </div>
                     </div>
-                    <!-- Photo 6: Slide Upward -->
-                    <div class="photo-card slide-up animate-on-scroll">
-                        <div class="img-placeholder">[ Photo 6 Placeholder ]</div>
-                        <p class="caption">To more sunset conversations and endless jokes.</p>
+
+                    <!-- Photo Card 6: Slide Upward -->
+                    <div class="premium-photo-card slide-up-trigger">
+                        <div class="photo-frame">
+                            <div class="photo-artwork design-gradient-6"></div>
+                            <div class="photo-overlay-shimmer"></div>
+                        </div>
+                        <div class="photo-details">
+                            <span class="photo-index">06 // ETERNITY BOUND</span>
+                            <p class="photo-caption">To infinitely more sunset talks, inside jokes, and protective support.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 3: Brightening Moon & Clouds -->
+        <!-- SECTION 3: THE MOON BRIGHTENS, CLOUDS DRIFT & INTERACTIVE GARDEN -->
         <section class="story-section" id="section-3" data-sky="bright-moon">
-            <div class="clouds-bg"></div>
-            <div class="floating-quote">"The stars look brighter tonight."</div>
+            <div class="cloud-layer-left"></div>
+            <div class="cloud-layer-right"></div>
+            <div class="floating-quote" id="quote-3">"The stars look brighter tonight."</div>
+            
             <div class="section-content">
                 <h2 class="section-title">Dreams I Wish For You</h2>
-                <div class="interactive-garden">
-                    <p class="interaction-hint">Touch the elements below to breathe life into them...</p>
-                    <div class="garden-elements">
-                        <div class="interactive-item" id="butterfly" title="Click me...">🦋 <span class="label">Butterfly</span></div>
-                        <div class="interactive-item" id="flower" title="Click me...">🌸 <span class="label">Flower</span></div>
+                
+                <div class="interactive-sanctuary">
+                    <p class="sanctuary-hint">The universe responds to your fingertips. Touch a manifestation below...</p>
+                    
+                    <div class="sanctuary-hub">
+                        <div class="sanctuary-node" id="butterfly" title="Awaken the cosmic butterfly...">
+                            <div class="node-icon">🦋</div>
+                            <span class="node-label">Ethereal Flight</span>
+                        </div>
+                        <div class="sanctuary-node" id="flower" title="Scatter fragile blossom petals...">
+                            <div class="node-icon">🌸</div>
+                            <span class="node-label">Blossom Spill</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- The Hidden Secret Star in the sky -->
-            <div class="secret-star" id="secret-star-btn" title="A tiny glow...">★</div>
+
+            <!-- THE INTENTIONAL ULTRA-HIDDEN SECRET STAR -->
+            <div class="cosmic-secret-star" id="secret-star-btn" title="A glitch in the cosmic pattern...">★</div>
         </section>
 
-        <!-- SECTION 4: Falling Stars & Candle Blow -->
+        <!-- SECTION 4: TINY FALLING STARS & THE RITUAL CANDLE -->
         <section class="story-section" id="section-4" data-sky="falling-stars">
             <canvas id="fallingStarsCanvas"></canvas>
+            
             <div class="section-content">
                 <h2 class="section-title">Make a Wish</h2>
                 
-                <div class="candle-scene" id="candle-scene-box">
-                    <p class="candle-hint" id="candle-hint-text">Click the flame to blow it out...</p>
-                    <div class="candle" id="candle-trigger">
-                        <div class="flame" id="candle-flame"></div>
-                        <div class="wick"></div>
-                        <div class="wax"></div>
+                <div class="candle-altar">
+                    <p class="candle-instructions" id="candle-hint-text">Gently tap the flame to blow it out and let your dream fly...</p>
+                    
+                    <div class="candle-fixture" id="candle-trigger">
+                        <div class="flame-aura"></div>
+                        <div class="candle-flame" id="candle-flame">
+                            <div class="flame-inner"></div>
+                            <div class="flame-core"></div>
+                        </div>
+                        <div class="candle-wick"></div>
+                        <div class="candle-body">
+                            <div class="wax-drip"></div>
+                        </div>
+                        <div class="candle-base"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 5: Aurora & Final Ending -->
+        <!-- SECTION 5: THE GRAND AURORA & FINAL MEMORY RESIDUE -->
         <section class="story-section" id="section-5" data-sky="aurora">
-            <div class="aurora-bg"></div>
-            <canvas id="fireworksCanvas" class="hidden-canvas"></canvas>
+            <div class="aurora-curtain field-1"></div>
+            <div class="aurora-curtain field-2"></div>
+            <canvas id="fireworksCanvas"></canvas>
             
-            <!-- Blackout cinematic overlay -->
-            <div id="blackout" class="blackout-screen"></div>
+            <!-- Absolute theatrical blackout panel -->
+            <div id="cinematic-blackout" class="cinematic-blackout"></div>
 
-            <div class="section-content final-container" id="final-message-box">
-                <p class="ending-quote">"Some memories stay forever."</p>
-                <h1 class="final-heading">Happy Birthday, Vanshika.</h1>
+            <div class="section-content final-theater-box" id="final-message-box">
+                <p class="monolith-quote">"Some memories stay forever."</p>
+                <h1 class="monolith-birthday-text">Happy Birthday, Vanshika.</h1>
+                <div class="monolith-underline"></div>
             </div>
         </section>
     </main>
 
-    <!-- SECRET PAGE MODAL (Completely hidden unless secret star is clicked) -->
-    <div id="secret-portal" class="secret-portal">
-        <div class="portal-content">
-            <button class="close-portal" id="close-portal-btn">×</button>
-            <span class="portal-star">★</span>
-            <h2>The Secret Diary</h2>
-            <p class="secret-text">
-                Vanshika, if you found this, it means you looked closely at the night sky. 
-                I wanted to leave this tiny space just to say: thank you for being the most incredible sister in the world. 
-                No matter how much we grow up, where our lives go, or how busy we get, this bond is sacred to me. 
-                I will always be your brother, your sounding board, and your protector. 
-                Happy Birthday, sis. 💜
+    <!-- THE ULTRA-SECRET PORTAL MODAL DIARY PAGE -->
+    <div id="secret-portal" class="secret-portal-overlay">
+        <div class="portal-glass-panel">
+            <button class="portal-close-button" id="close-portal-btn" aria-label="Close hidden layer">×</button>
+            <div class="portal-sparkle-indicator">★</div>
+            <h2 class="portal-heading">The Letter That Stays Hidden</h2>
+            <div class="portal-divider"></div>
+            <p class="portal-paragraph">
+                Vanshika, if you are reading these words, it means you clicked that tiny, off-beat glowing star in the sky. I knew you would look closely enough to spot it.
+            </p>
+            <p class="portal-paragraph">
+                I wanted to leave an completely un-compromised, secret letter just for you. Thank you for being the most incredible sister a brother could ever ask for. From class ninth to this exact moment, you have made my life exponentially richer, kinder, and happier. No matter where time pulls us, or how vast our responsibilities grow, you will always have a brother standing directly behind you, ready to protect you and support you. Happy Birthday, sis. Always and forever. 💜
             </p>
         </div>
     </div>
